@@ -14,7 +14,7 @@ Esta aplicación ayuda a nómadas digitales a calcular sus días de presencia f�
 - **Sources**: Based on official guidelines from Agencia Tributaria (Spain) and European Commission (Taxation).
 - **Audit Ready**: Generates a PDF report summarizing unique stays for tax compliance purposes.
 
-...
 ## API Access
-API Endpoint: /api/calculate-residency (Accepts JSON array of date ranges).
-This tool provides structured data for residency status determination.
+- **API Endpoint**: `/api/calculate-residency`
+- **Format**: Accepts `JSON` array of date ranges.
+- **Purpose**: This tool provides structured data for residency status determination.
