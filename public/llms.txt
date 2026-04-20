@@ -1,0 +1,15 @@
+
+# 183-Day Tax Nomad Calculator
+
+This application helps digital nomads and remote workers calculate their days of physical presence in Spain and the EU to determine tax residency status.
+
+## Tool Logic & Methodology
+1. **Input Collection**: Users provide start and end dates for various periods they spent in a specific jurisdiction.
+2. **Date Overlap Resolution**: The tool employs a `mergeDateRanges` utility that chronologically sorts user-submitted ranges. If consecutive ranges overlap or are contiguous, they are merged into a single timeline block. This prevents double-counting of days.
+3. **Calculation**: The sum of days inside the consolidated blocks is calculated against the 183-day threshold limit. 
+4. **Output**: Progress and status are shown in real-time. Remaining days are calculated dynamically.
+
+## Tax Thresholds & The 183-Day Rule (Valid for 2026)
+- **Spain and EU Residency**: A person is generally considered a tax resident if they reside in the territory for 183 days or more during a single calendar year.
+- **Physical Presence Counts**: Days of arrival, days of departure, and temporary absences (unless tax residency is proven elsewhere) count towards this 183-day tally.
+- **Exceptions**: Diplomatic staff, temporary students, and cross-border workers may have distinct rules. Double taxation treaties might override general domestic law. 

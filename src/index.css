@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 15%;
+    
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221 83% 53%;
+    
+    --footer: 210 40% 98%;
+    --footer-foreground: 215.4 16.3% 46.9%;
+    
+    --radius: 0.75rem;
+  }
+  
+  .dark {
+    --background: 217 33% 7%;
+    --foreground: 210 40% 98%;
+    
+    --card: 215 28% 17%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 215 28% 17%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 15%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    
+    --footer: 217 33% 10%;
+    --footer-foreground: 215 20.2% 65.1%;
+  }
+  
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: "Geist", sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow-x: hidden;
+    font-variant-numeric: tabular-nums;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .lift-on-hover {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1.5;
+  }
+  
+  .layout-60-40 {
+    @apply grid grid-cols-1 lg:grid-cols-12 gap-8 items-start;
+  }
+  
+  .layout-60 {
+    @apply lg:col-span-7 flex flex-col gap-8;
+  }
+  
+  .layout-40 {
+    @apply lg:col-span-5 flex flex-col gap-8 lg:sticky lg:top-8;
+  }
+}
+
+@layer utilities {
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+  
+  .animate-shimmer-fast {
+    animation: shimmer 1s infinite;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .animate-pop {
+    animation: pop 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-shimmer,
+    .animate-shimmer-fast,
+    .animate-pop,
+    .lift-on-hover {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+}
