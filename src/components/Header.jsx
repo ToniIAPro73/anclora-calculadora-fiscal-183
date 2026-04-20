@@ -16,18 +16,18 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
+        <div className="flex h-16 sm:h-20 items-center justify-between gap-3 sm:gap-4">
 
           {/* Logo */}
           <div
-            className="flex items-center gap-3 cursor-pointer shrink-0"
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0"
             onClick={() => navigate('/')}
           >
             <BrandLogo
-              variant={theme === 'light' ? 'light' : 'default'}
-              className="h-11 w-auto shrink-0"
+              variant={theme === 'dark' ? 'dark' : 'light'}
+              className="h-11 sm:h-14 w-auto shrink-0"
             />
-            <span className="text-xl font-black tracking-tighter text-foreground sm:text-[1.45rem]">
+            <span className="text-lg sm:text-2xl font-black tracking-tighter text-foreground">
               Tax<span className="text-primary">Nomad</span>
             </span>
           </div>

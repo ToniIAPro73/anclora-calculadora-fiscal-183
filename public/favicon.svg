@@ -1,31 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#0f172a"/>
       <stop offset="100%" stop-color="#2563eb"/>
     </linearGradient>
-    <linearGradient id="bar" x1="20" y1="0" x2="80" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#1d4ed8"/>
-      <stop offset="100%" stop-color="#60a5fa"/>
+    <linearGradient id="bar" x1="18" y1="0" x2="102" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#bfdbfe"/>
+      <stop offset="100%" stop-color="#f1f5ff"/>
     </linearGradient>
-    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="1.2" stdDeviation="1.2" flood-color="#0f172a" flood-opacity="0.28"/>
-    </filter>
   </defs>
-  <rect width="100" height="100" rx="24" fill="url(#bg)"/>
-  <g filter="url(#soft-shadow)">
-    <path d="M20 29h50" stroke="#1e3a8a" stroke-opacity="0.52" stroke-width="6" stroke-linecap="round"/>
-    <path d="M20 29h50" stroke="url(#bar)" stroke-width="4.2" stroke-linecap="round"/>
-    <path d="M20 68.5h60" stroke="#1e3a8a" stroke-opacity="0.52" stroke-width="6" stroke-linecap="round"/>
-    <path d="M20 68.5h60" stroke="url(#bar)" stroke-width="4.2" stroke-linecap="round"/>
-  </g>
-  <text x="50" y="61"
+  <rect width="120" height="120" rx="26" fill="url(#bg)"/>
+
+  <!-- Top bar (y=38), equidistant from visual centre (y=62) -->
+  <path d="M18 38h84" stroke="#0b1220" stroke-opacity="0.55" stroke-width="9" stroke-linecap="round"/>
+  <path d="M18 38h84" stroke="url(#bar)" stroke-width="6.4" stroke-linecap="round"/>
+
+  <!-- Bottom bar (y=86) -->
+  <path d="M18 86h84" stroke="#0b1220" stroke-opacity="0.55" stroke-width="9" stroke-linecap="round"/>
+  <path d="M18 86h84" stroke="url(#bar)" stroke-width="6.4" stroke-linecap="round"/>
+
+  <!-- 183 centred between the bars -->
+  <text x="60" y="62"
         font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
-        font-size="33" font-weight="900"
-        fill="white" stroke="#1e40af" stroke-width="1.8" paint-order="stroke fill"
-        text-anchor="middle">183</text>
-  <path d="M72 21l6.2 6.4 11.8-12"
-        stroke="#ca8a04" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M72 20l6.2 6.4 11.8-12"
-        stroke="#facc15" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        font-size="38" font-weight="900"
+        text-anchor="middle" dominant-baseline="central"
+        fill="#ffffff" stroke="#1d4ed8" stroke-width="1.6" paint-order="stroke fill">183</text>
+
+  <!-- Check mark over top-right -->
+  <path d="M80 28 l8 9 l16 -17" fill="none" stroke="#ca8a04" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M80 26 l8 9 l16 -17" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
