@@ -1,14 +1,12 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { enUS, es } from 'date-fns/locale';
 import { CalendarDays, PencilLine, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLanguage } from '@/hooks/useLanguage.js';
 
 const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
-  const { t, language } = useLanguage();
-  const locale = language === 'es' ? es : enUS;
+  const { t } = useLanguage();
 
   return (
     <Card className="overflow-hidden rounded-[24px] border-border/70 bg-card shadow-sm">
@@ -43,14 +41,14 @@ const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
                       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                         {t('rangeList.from')}
                       </p>
-                      <p className="mt-1 font-medium">{format(range.start, 'PPP', { locale })}</p>
+                      <p className="mt-1 font-medium">{format(range.start, 'yyyy-MM-dd')}</p>
                     </div>
 
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                         {t('rangeList.to')}
                       </p>
-                      <p className="mt-1 font-medium">{format(range.end, 'PPP', { locale })}</p>
+                      <p className="mt-1 font-medium">{format(range.end, 'yyyy-MM-dd')}</p>
                     </div>
 
                     <div>

@@ -8,6 +8,7 @@ import {
   isBefore,
   isValid,
   parseISO,
+  startOfMonth,
   startOfYear,
 } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
@@ -22,6 +23,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter as AlertDialogFooterActions,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   Dialog,
   DialogContent,
@@ -49,11 +60,16 @@ const DateRangeSelector = ({
   const [startInput, setStartInput] = useState('');
   const [endInput, setEndInput] = useState('');
   const [monthCount, setMonthCount] = useState(1);
+  const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()));
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
 
   const locale = language === 'es' ? es : enUS;
+  const today = useMemo(() => new Date(), []);
+  const initialMonth = useMemo(() => startOfMonth(today), [today]);
   const exerciseStart = useMemo(() => startOfYear(new Date()), []);
   const exerciseEnd = useMemo(() => endOfYear(new Date()), []);
   const isEditing = editingRangeIndex !== null && editingRangeIndex !== undefined;
+  const currentEditingRange = isEditing ? ranges[editingRangeIndex] : null;
   const savedRangeCountLabel = language === 'es'
     ? `${ranges.length} ${ranges.length === 1 ? 'rango guardado' : 'rangos guardados'}`
     : `${ranges.length} ${ranges.length === 1 ? 'range saved' : 'ranges saved'}`;
@@ -73,20 +89,19 @@ const DateRangeSelector = ({
       return;
     }
 
-    const rangeToEdit = ranges[editingRangeIndex];
-
-    if (!rangeToEdit) {
+    if (!currentEditingRange) {
       onEditingHandled?.();
       return;
     }
 
-    setDraftStart(rangeToEdit.start);
-    setDraftEnd(rangeToEdit.end);
-    setStartInput(toInputValue(rangeToEdit.start));
-    setEndInput(toInputValue(rangeToEdit.end));
+    setDraftStart(currentEditingRange.start);
+    setDraftEnd(currentEditingRange.end);
+    setStartInput(toInputValue(currentEditingRange.start));
+    setEndInput(toInputValue(currentEditingRange.end));
     setHoverDate(null);
+    setVisibleMonth(startOfMonth(currentEditingRange.start));
     setOpen(true);
-  }, [editingRangeIndex, isEditing, onEditingHandled, ranges]);
+  }, [currentEditingRange, isEditing, onEditingHandled]);
 
   const occupiedRanges = useMemo(
     () => ranges.filter((_, index) => index !== editingRangeIndex),
@@ -147,16 +162,48 @@ const DateRangeSelector = ({
 
   const canSubmit = !validationMessage && draftStart && draftEnd;
   const selectingEnd = Boolean(draftStart && !draftEnd);
-  const resetDraft = () => {
-    setDraftStart(null);
-    setDraftEnd(null);
+  const initialStartInput = currentEditingRange ? toInputValue(currentEditingRange.start) : '';
+  const initialEndInput = currentEditingRange ? toInputValue(currentEditingRange.end) : '';
+  const initialVisibleMonth = currentEditingRange ? startOfMonth(currentEditingRange.start) : initialMonth;
+  const startInputMin = toInputValue(exerciseStart);
+  const startInputMax = draftEnd ? toInputValue(draftEnd) : toInputValue(exerciseEnd);
+  const endInputMin = draftStart ? toInputValue(draftStart) : toInputValue(exerciseStart);
+  const endInputMax = toInputValue(exerciseEnd);
+
+  const applyInitialDraftState = () => {
+    if (currentEditingRange) {
+      setDraftStart(currentEditingRange.start);
+      setDraftEnd(currentEditingRange.end);
+      setStartInput(toInputValue(currentEditingRange.start));
+      setEndInput(toInputValue(currentEditingRange.end));
+      setVisibleMonth(startOfMonth(currentEditingRange.start));
+    } else {
+      setDraftStart(null);
+      setDraftEnd(null);
+      setStartInput('');
+      setEndInput('');
+      setVisibleMonth(initialMonth);
+    }
+
     setHoverDate(null);
-    setStartInput('');
-    setEndInput('');
   };
+
+  const resetDraft = () => {
+    applyInitialDraftState();
+  };
+
+  const hasUnsavedChanges = Boolean(
+    hoverDate
+    || startInput !== initialStartInput
+    || endInput !== initialEndInput
+    || toInputValue(draftStart) !== initialStartInput
+    || toInputValue(draftEnd) !== initialEndInput
+    || toDayKey(visibleMonth) !== toDayKey(initialVisibleMonth),
+  );
 
   const closeModal = () => {
     setOpen(false);
+    setResetConfirmOpen(false);
     resetDraft();
     onEditingHandled?.();
   };
@@ -197,6 +244,15 @@ const DateRangeSelector = ({
 
     const parsedDate = parseInputDate(value);
     setDraftStart(parsedDate);
+
+    if (parsedDate) {
+      setVisibleMonth(startOfMonth(parsedDate));
+
+      if (draftEnd && isBefore(draftEnd, parsedDate)) {
+        setDraftEnd(null);
+        setEndInput('');
+      }
+    }
   };
 
   const handleEndInputChange = (value) => {
@@ -204,6 +260,24 @@ const DateRangeSelector = ({
 
     const parsedDate = parseInputDate(value);
     setDraftEnd(parsedDate);
+
+    if (parsedDate) {
+      setVisibleMonth(startOfMonth(parsedDate));
+    }
+  };
+
+  const handleResetModal = () => {
+    if (hasUnsavedChanges) {
+      setResetConfirmOpen(true);
+      return;
+    }
+
+    resetDraft();
+  };
+
+  const confirmResetModal = () => {
+    resetDraft();
+    setResetConfirmOpen(false);
   };
 
   const handleConfirm = () => {
@@ -329,8 +403,8 @@ const DateRangeSelector = ({
                           id="range-start-date"
                           type="date"
                           value={startInput}
-                          min={toInputValue(exerciseStart)}
-                          max={toInputValue(exerciseEnd)}
+                          min={startInputMin}
+                          max={startInputMax}
                           onChange={(event) => handleStartInputChange(event.target.value)}
                           className="h-11 rounded-xl bg-background"
                         />
@@ -345,8 +419,8 @@ const DateRangeSelector = ({
                           id="range-end-date"
                           type="date"
                           value={endInput}
-                          min={toInputValue(exerciseStart)}
-                          max={toInputValue(exerciseEnd)}
+                          min={endInputMin}
+                          max={endInputMax}
                           onChange={(event) => handleEndInputChange(event.target.value)}
                           className="h-11 rounded-xl bg-background"
                         />
@@ -376,8 +450,8 @@ const DateRangeSelector = ({
                       <div className="rounded-2xl bg-primary/8 p-4">
                         <p className="text-sm font-semibold text-foreground">{t('dateSelector.selectedRange')}</p>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          {format(draftStart, 'PPP', { locale })} <span className="mx-1 text-muted-foreground/60">→</span>
-                          {format(draftEnd, 'PPP', { locale })}
+                          {toInputValue(draftStart)} <span className="mx-1 text-muted-foreground/60">→</span>
+                          {toInputValue(draftEnd)}
                         </p>
                         <p className="mt-2 text-sm font-semibold text-primary">
                           {differenceInCalendarDays(draftEnd, draftStart) + 1} {differenceInCalendarDays(draftEnd, draftStart) + 1 === 1 ? t('dateSelector.day') : t('dateSelector.days')}
@@ -393,9 +467,10 @@ const DateRangeSelector = ({
                     locale={locale}
                     selected={rangePreview}
                     numberOfMonths={monthCount}
-                    defaultMonth={draftStart || exerciseStart}
+                    month={visibleMonth}
                     weekStartsOn={language === 'es' ? 1 : 0}
                     onDayClick={handleDayClick}
+                    onMonthChange={setVisibleMonth}
                     onDayMouseEnter={(day) => {
                       if (selectingEnd) {
                         setHoverDate(day);
@@ -417,11 +492,11 @@ const DateRangeSelector = ({
                     classNames={{
                       root: 'w-full',
                       months: 'grid grid-cols-1 gap-4 xl:grid-cols-2',
-                      month: 'min-w-0 rounded-2xl border border-border/60 bg-background p-3 shadow-sm',
-                      nav: 'absolute left-3 right-3 top-3 flex items-center justify-between',
-                      button_previous: 'h-9 w-9 rounded-full border border-border/70 bg-background/90 text-foreground shadow-sm hover:bg-accent',
-                      button_next: 'h-9 w-9 rounded-full border border-border/70 bg-background/90 text-foreground shadow-sm hover:bg-accent',
-                      month_caption: 'mb-4 flex h-10 items-center justify-center rounded-2xl bg-muted/35 px-12',
+                      month: 'relative min-w-0 rounded-2xl border border-border/60 bg-background p-3 pt-14 shadow-sm',
+                      nav: 'absolute right-3 top-3 z-10 flex items-center gap-2',
+                      button_previous: 'static h-9 w-9 rounded-full border border-border/70 bg-background text-foreground shadow-sm hover:bg-accent',
+                      button_next: 'static h-9 w-9 rounded-full border border-border/70 bg-background text-foreground shadow-sm hover:bg-accent',
+                      month_caption: 'mb-4 flex h-10 items-center justify-start rounded-2xl bg-muted/35 pl-4 pr-24 text-left',
                       caption_label: 'text-base font-semibold tracking-tight capitalize',
                       table: 'w-full border-collapse table-fixed',
                       weekdays: 'table-row',
@@ -452,28 +527,61 @@ const DateRangeSelector = ({
               </div>
             </div>
 
-            <DialogFooter className="border-t border-border/70 bg-background/95 px-4 py-4 sm:px-6">
+            <DialogFooter className="mt-auto shrink-0 border-t border-border/70 bg-background/95 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:space-x-0">
               <Button
                 type="button"
-                variant="outline"
-                onClick={closeModal}
-                className="h-11 rounded-full px-5"
+                variant="ghost"
+                onClick={handleResetModal}
+                className="h-11 rounded-full px-5 text-muted-foreground"
               >
-                {t('dateSelector.cancel')}
+                {t('dateSelector.reset')}
               </Button>
-              <Button
-                type="button"
-                onClick={handleConfirm}
-                disabled={!canSubmit}
-                className="h-11 rounded-full px-5 font-semibold shadow-md shadow-primary/15"
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                {isEditing ? t('dateSelector.confirmEdit') : t('dateSelector.addRange')}
-              </Button>
+
+              <div className="flex flex-col-reverse gap-2 sm:flex-row">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={closeModal}
+                  className="h-11 rounded-full px-5"
+                >
+                  {t('dateSelector.cancel')}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleConfirm}
+                  disabled={!canSubmit}
+                  className="h-11 rounded-full px-5 font-semibold shadow-md shadow-primary/15"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  {isEditing ? t('dateSelector.confirmEdit') : t('dateSelector.addRange')}
+                </Button>
+              </div>
             </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={resetConfirmOpen} onOpenChange={setResetConfirmOpen}>
+        <AlertDialogContent className="max-w-md rounded-[24px] border-border/80">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('dateSelector.resetDialogTitle')}</AlertDialogTitle>
+            <AlertDialogDescription className="leading-6">
+              {t('dateSelector.resetWarning')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooterActions>
+            <AlertDialogCancel className="rounded-full">
+              {t('dateSelector.resetDialogCancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmResetModal}
+              className="rounded-full"
+            >
+              {t('dateSelector.resetDialogConfirm')}
+            </AlertDialogAction>
+          </AlertDialogFooterActions>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
