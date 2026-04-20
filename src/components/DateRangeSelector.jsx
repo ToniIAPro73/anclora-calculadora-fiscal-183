@@ -165,10 +165,6 @@ const DateRangeSelector = ({
   const initialStartInput = currentEditingRange ? toInputValue(currentEditingRange.start) : '';
   const initialEndInput = currentEditingRange ? toInputValue(currentEditingRange.end) : '';
   const initialVisibleMonth = currentEditingRange ? startOfMonth(currentEditingRange.start) : initialMonth;
-  const startInputMin = toInputValue(exerciseStart);
-  const startInputMax = draftEnd ? toInputValue(draftEnd) : toInputValue(exerciseEnd);
-  const endInputMin = draftStart ? toInputValue(draftStart) : toInputValue(exerciseStart);
-  const endInputMax = toInputValue(exerciseEnd);
 
   const applyInitialDraftState = () => {
     if (currentEditingRange) {
@@ -345,7 +341,7 @@ const DateRangeSelector = ({
       <Dialog open={open} onOpenChange={(nextOpen) => (nextOpen ? setOpen(true) : closeModal())}>
         <DialogContent
           showClose={false}
-          className="h-[calc(100vh-1rem)] max-h-[calc(100vh-1rem)] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] gap-0 overflow-hidden rounded-[28px] border-border/80 p-0 sm:h-auto sm:max-h-[92vh] sm:max-w-[1140px]"
+          className="h-[calc(100vh-1rem)] max-h-[calc(100vh-1rem)] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] gap-0 overflow-hidden rounded-[28px] border-border/80 p-0 sm:h-[92vh] sm:max-h-[92vh] sm:max-w-[1140px]"
         >
           <div className="flex h-full flex-col">
             <DialogHeader className="border-b border-border/70 px-5 py-5 sm:px-7">
@@ -401,10 +397,10 @@ const DateRangeSelector = ({
                         </label>
                         <Input
                           id="range-start-date"
-                          type="date"
+                          type="text"
                           value={startInput}
-                          min={startInputMin}
-                          max={startInputMax}
+                          inputMode="numeric"
+                          placeholder="YYYY/MM/DD"
                           onChange={(event) => handleStartInputChange(event.target.value)}
                           className="h-11 rounded-xl bg-background"
                         />
@@ -417,10 +413,10 @@ const DateRangeSelector = ({
                         </label>
                         <Input
                           id="range-end-date"
-                          type="date"
+                          type="text"
                           value={endInput}
-                          min={endInputMin}
-                          max={endInputMax}
+                          inputMode="numeric"
+                          placeholder="YYYY/MM/DD"
                           onChange={(event) => handleEndInputChange(event.target.value)}
                           className="h-11 rounded-xl bg-background"
                         />
@@ -490,13 +486,13 @@ const DateRangeSelector = ({
                       outOfExercise: 'opacity-30',
                     }}
                     classNames={{
-                      root: 'w-full',
+                      root: 'relative w-full pt-14',
                       months: 'grid grid-cols-1 gap-4 xl:grid-cols-2',
-                      month: 'relative min-w-0 rounded-2xl border border-border/60 bg-background p-3 pt-14 shadow-sm',
-                      nav: 'absolute right-3 top-3 z-10 flex items-center gap-2',
+                      month: 'min-w-0 rounded-2xl border border-border/60 bg-background p-3 shadow-sm',
+                      nav: 'absolute right-4 top-4 z-10 flex items-center gap-2 rounded-full border border-border/60 bg-background/95 px-2 py-2 shadow-sm',
                       button_previous: 'static h-9 w-9 rounded-full border border-border/70 bg-background text-foreground shadow-sm hover:bg-accent',
                       button_next: 'static h-9 w-9 rounded-full border border-border/70 bg-background text-foreground shadow-sm hover:bg-accent',
-                      month_caption: 'mb-4 flex h-10 items-center justify-start rounded-2xl bg-muted/35 pl-4 pr-24 text-left',
+                      month_caption: 'mb-4 flex h-10 items-center justify-start rounded-2xl bg-muted/35 px-4 text-left',
                       caption_label: 'text-base font-semibold tracking-tight capitalize',
                       table: 'w-full border-collapse table-fixed',
                       weekdays: 'table-row',
@@ -591,13 +587,15 @@ function toDayKey(date) {
 }
 
 function toInputValue(date) {
-  return date ? format(date, 'yyyy-MM-dd') : '';
+  return date ? format(date, 'yyyy/MM/dd') : '';
 }
 
 function parseInputDate(value) {
   if (!value) return null;
 
-  const parsedDate = parseISO(value);
+  const normalizedValue = value.replace(/\./g, '/').replace(/-/g, '/');
+  const isoLikeValue = normalizedValue.replace(/\//g, '-');
+  const parsedDate = parseISO(isoLikeValue);
   return isValid(parsedDate) ? parsedDate : null;
 }
 

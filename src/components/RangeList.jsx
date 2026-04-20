@@ -41,14 +41,14 @@ const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
                       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                         {t('rangeList.from')}
                       </p>
-                      <p className="mt-1 font-medium">{format(range.start, 'yyyy-MM-dd')}</p>
+                      <p className="mt-1 font-medium">{format(range.start, 'yyyy/MM/dd')}</p>
                     </div>
 
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                         {t('rangeList.to')}
                       </p>
-                      <p className="mt-1 font-medium">{format(range.end, 'yyyy-MM-dd')}</p>
+                      <p className="mt-1 font-medium">{format(range.end, 'yyyy/MM/dd')}</p>
                     </div>
 
                     <div>
