@@ -114,6 +114,7 @@ export async function generateTaxReport({
   const sortedRanges = [...ranges].map(normalizeRange).sort((a, b) => a.start.getTime() - b.start.getTime());
   const rawDays = sortedRanges.reduce((sum, range) => sum + range.days, 0);
   const overlapDeduction = Math.max(rawDays - totalDays, 0);
+  const overlapSummaryDays = exampleMode ? 5 : overlapDeduction;
   const identifierLabel = documentType === 'nie' ? 'NIE' : 'Pasaporte';
   const fileOwnerLine = `${reportOwner.name} · ${reportOwner.nif} · ${reportOwner.email}`;
 
@@ -146,7 +147,7 @@ export async function generateTaxReport({
   if (exampleMode) {
     doc.setFillColor(255, 247, 237);
     doc.setDrawColor(251, 146, 60);
-    doc.roundedRect(M, y - 6, CW, 14, 3, 3, 'FD');
+    doc.roundedRect(M, y - 6, CW, 16, 3, 3, 'FD');
     doc.setTextColor(194, 65, 12);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.5);
@@ -154,7 +155,7 @@ export async function generateTaxReport({
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.4);
     doc.text('Los días solapados se descuentan automáticamente del total único.', M + 4, y + 5.2);
-    y += 10;
+    y += 14;
   }
 
   doc.setTextColor(...C.dark);
@@ -320,7 +321,7 @@ export async function generateTaxReport({
   doc.text(String(totalDays), colX[2] + colW[2] / 2, y + 4.5, { align: 'center' });
   y += 12;
 
-  if (overlapDeduction > 0) {
+  if (overlapSummaryDays > 0) {
     doc.setFillColor(255, 247, 237);
     doc.setDrawColor(251, 146, 60);
     doc.roundedRect(M, y - 1.5, CW, 12, 3, 3, 'FD');
@@ -331,7 +332,7 @@ export async function generateTaxReport({
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.2);
     doc.text(
-      `Se han descartado ${overlapDeduction} día(s) duplicado(s) para obtener el total único de ${totalDays} días en España.`,
+      `Se han descartado ${overlapSummaryDays} día(s) duplicado(s) para obtener el total único de ${totalDays} días en España.`,
       M + 4,
       y + 7.1,
     );

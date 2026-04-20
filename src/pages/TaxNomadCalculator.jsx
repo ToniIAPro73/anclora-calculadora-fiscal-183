@@ -47,7 +47,7 @@ const TaxNomadCalculator = () => {
   };
 
   const handleOpenExample = async () => {
-    const previewWindow = window.open('', '_blank', 'noopener,noreferrer');
+    const previewWindow = window.open('about:blank', '_blank');
     const example = buildExampleReportPayload();
 
     try {
@@ -63,7 +63,8 @@ const TaxNomadCalculator = () => {
 
       const blobUrl = doc.output('bloburl');
 
-      if (previewWindow) {
+      if (previewWindow && !previewWindow.closed) {
+        previewWindow.opener = null;
         previewWindow.location.href = blobUrl;
       } else {
         window.open(blobUrl, '_blank', 'noopener,noreferrer');
