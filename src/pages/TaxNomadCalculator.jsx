@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   ArrowSquareOut,
+  CalendarPlus,
   ClockCountdown,
   ShieldCheck,
   Sparkle,
@@ -28,6 +29,7 @@ const TaxNomadCalculator = () => {
   const [selectedRanges, setSelectedRanges] = useState([]);
   const [editingRangeIndex, setEditingRangeIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRangeModalOpen, setIsRangeModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [userData, setUserData] = useState({ name: '', documentType: 'passport', taxId: '' });
 
@@ -54,6 +56,11 @@ const TaxNomadCalculator = () => {
       if (currentIndex === index) return null;
       return currentIndex > index ? currentIndex - 1 : currentIndex;
     });
+  };
+
+  const handleEditRange = (index) => {
+    setEditingRangeIndex(index);
+    setIsRangeModalOpen(true);
   };
 
   const handleUpdateRange = (index, nextRange) => {
@@ -159,6 +166,16 @@ const TaxNomadCalculator = () => {
       <Helmet>
         <title>{t('meta.title')}</title>
       </Helmet>
+
+      <DateRangeSelector
+        ranges={selectedRanges}
+        onAddRange={handleAddRange}
+        onUpdateRange={handleUpdateRange}
+        editingRangeIndex={editingRangeIndex}
+        onEditingHandled={() => setEditingRangeIndex(null)}
+        isOpen={isRangeModalOpen}
+        setIsOpen={setIsRangeModalOpen}
+      />
 
       <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-background">
         <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
@@ -309,18 +326,44 @@ const TaxNomadCalculator = () => {
           <section className="premium-section pt-0">
             <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.08fr)_380px]">
               <div className="space-y-8">
-                <DateRangeSelector
-                  ranges={selectedRanges}
-                  onAddRange={handleAddRange}
-                  onUpdateRange={handleUpdateRange}
-                  editingRangeIndex={editingRangeIndex}
-                  onEditingHandled={() => setEditingRangeIndex(null)}
-                />
-                <RangeList
-                  ranges={annotatedRanges}
-                  onRemoveRange={handleRemoveRange}
-                  onEditRange={setEditingRangeIndex}
-                />
+                <div className="space-y-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingRangeIndex(null);
+                      setIsRangeModalOpen(true);
+                    }}
+                    className="group relative flex w-full flex-col items-center justify-center overflow-hidden rounded-[32px] border border-white/10 bg-[#0d1320] p-8 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 hover:border-primary/30 hover:bg-[#0f172a] sm:p-12"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.08),transparent_70%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+                    
+                    <div className="relative flex flex-col items-center gap-6">
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full border border-primary/20 bg-primary/10 transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-110">
+                        <CalendarPlus size={32} weight="fill" className="text-primary" />
+                      </div>
+                      
+                      <div className="space-y-2 text-center">
+                        <h3 className="text-3xl font-[700] tracking-tight text-white">
+                          {selectedRanges.length > 0 ? t('dateSelector.addAnotherRange') : t('dateSelector.title')}
+                        </h3>
+                        <p className="max-w-[40ch] text-base leading-relaxed text-muted-foreground">
+                          {t('dateSelector.description')}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-3 rounded-full bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors duration-700 group-hover:bg-primary group-hover:text-primary-foreground">
+                        <CalendarPlus size={20} weight="bold" />
+                        {selectedRanges.length > 0 ? t('dateSelector.addAnotherRange') : t('dateSelector.title')}
+                      </div>
+                    </div>
+                  </button>
+
+                  <RangeList
+                    ranges={annotatedRanges}
+                    onRemoveRange={handleRemoveRange}
+                    onEditRange={handleEditRange}
+                  />
+                </div>
                 <DataAuthoritySection />
               </div>
 
