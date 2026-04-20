@@ -59,7 +59,7 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
               <FileDown className="w-4 h-4" />
               <span className="font-bold flex items-center gap-1.5 text-sm">
                 <span className="hidden sm:inline">
-                  {language === 'es' ? 'Generar PDF' : 'Generate PDF'}
+                  {t('actions.generatePdf')}
                 </span>
                 <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">
                   9,99€

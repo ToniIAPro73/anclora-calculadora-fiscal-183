@@ -20,6 +20,7 @@ const TaxNomadCalculator = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [selectedRanges, setSelectedRanges] = useState([]);
+  const [editingRangeIndex, setEditingRangeIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [userData, setUserData] = useState({ name: '', documentType: 'passport', taxId: '' });
@@ -38,12 +39,22 @@ const TaxNomadCalculator = () => {
 
   const handleAddRange = (range) => {
     setSelectedRanges(prev => [...prev, range]);
-    toast.success(t('toast.rangeAdded'));
   };
 
   const handleRemoveRange = (index) => {
     setSelectedRanges(prev => prev.filter((_, i) => i !== index));
-    toast.success(t('toast.rangeRemoved'));
+    setEditingRangeIndex((currentIndex) => {
+      if (currentIndex === null) return null;
+      if (currentIndex === index) return null;
+      return currentIndex > index ? currentIndex - 1 : currentIndex;
+    });
+  };
+
+  const handleUpdateRange = (index, nextRange) => {
+    setSelectedRanges(prev => prev.map((range, currentIndex) => (
+      currentIndex === index ? nextRange : range
+    )));
+    setEditingRangeIndex(null);
   };
 
   const handleOpenExample = async () => {
@@ -158,8 +169,18 @@ const TaxNomadCalculator = () => {
                 <p className="text-muted-foreground text-lg">{t('header.subtitle')}</p>
               </div>
 
-              <DateRangeSelector onAddRange={handleAddRange} />
-              <RangeList ranges={annotatedRanges} onRemoveRange={handleRemoveRange} />
+              <DateRangeSelector
+                ranges={selectedRanges}
+                onAddRange={handleAddRange}
+                onUpdateRange={handleUpdateRange}
+                editingRangeIndex={editingRangeIndex}
+                onEditingHandled={() => setEditingRangeIndex(null)}
+              />
+              <RangeList
+                ranges={annotatedRanges}
+                onRemoveRange={handleRemoveRange}
+                onEditRange={setEditingRangeIndex}
+              />
               <ProgressBar totalDays={totalDays} />
               <DataAuthoritySection />
             </div>
@@ -169,9 +190,20 @@ const TaxNomadCalculator = () => {
               <SummaryCard title={t('stats.remainingDays')} value={remaining}                    status={statusObj} />
               <SummaryCard title={t('stats.limitUsage')}    value={`${percentage.toFixed(1)}%`}  status={statusObj} />
 
-              <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 text-[11px] text-muted-foreground flex gap-3">
-                <Shield className="w-4 h-4 text-primary shrink-0" />
-                <p><strong>Audit-Ready:</strong> Reporte generado bajo estándares de cumplimiento de la UE.</p>
+              <div className="overflow-hidden rounded-[24px] border border-primary/15 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4 text-[11px] text-muted-foreground shadow-sm">
+                <div className="flex gap-3">
+                  <div className="rounded-full bg-primary/10 p-2">
+                    <Shield className="w-4 h-4 text-primary shrink-0" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
+                      {t('auditReady.title')}
+                    </p>
+                    <p className="leading-relaxed">
+                      {t('auditReady.description')}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
