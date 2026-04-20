@@ -6,6 +6,8 @@ import ScrollToTop from './components/ScrollToTop';
 import TaxNomadCalculator from './pages/TaxNomadCalculator';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import PaymentMock from './pages/PaymentMock';
+import PaymentSuccess from './pages/PaymentSuccess';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { I18nProvider } from './contexts/i18nContext';
 
@@ -27,11 +29,13 @@ function App() {
         <Router>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<TaxNomadCalculator />} />
-            <Route path="/calculator" element={<TaxNomadCalculator />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="*" element={<TaxNomadCalculator />} />
+            <Route path="/"               element={<TaxNomadCalculator />} />
+            <Route path="/calculator"     element={<TaxNomadCalculator />} />
+            <Route path="/privacy"        element={<PrivacyPolicy />} />
+            <Route path="/terms"          element={<TermsOfService />} />
+            <Route path="/payment-mock"   element={<PaymentMock />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="*"               element={<TaxNomadCalculator />} />
           </Routes>
         </Router>
         <Toaster position="top-center" richColors />

@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Moon, Sun, Shield, FileDown, Eye, Lock } from 'lucide-react';
+import { Globe, Moon, Sun, FileDown, Eye, Lock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { useLanguage } from "@/hooks/useLanguage";
+import Logo from '@/components/Logo';
 
 const Header = ({ totalDays = 0, onOpenModal }) => {
   const navigate = useNavigate();
@@ -16,22 +17,21 @@ const Header = ({ totalDays = 0, onOpenModal }) => {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
-          
-          {/* Logo y Nombre - Siempre Visibles */}
-          <div 
-            className="flex items-center gap-2 cursor-pointer shrink-0"
+
+          {/* Logo */}
+          <div
+            className="flex items-center gap-2.5 cursor-pointer shrink-0"
             onClick={() => navigate('/')}
           >
-            <Shield className="w-7 h-7 text-primary shrink-0" />
+            <Logo size={30} />
             <span className="text-xl font-black tracking-tighter text-foreground">
               Tax<span className="text-primary">Nomad</span>
             </span>
           </div>
 
-          {/* Grupo de Acciones */}
+          {/* Actions */}
           <div className="flex items-center gap-2">
-            
-            {/* Botón de Preview (Ejemplo) */}
+
             <Button
               variant="ghost"
               size="sm"
@@ -42,13 +42,12 @@ const Header = ({ totalDays = 0, onOpenModal }) => {
               {language === 'es' ? 'Ver Ejemplo' : 'View Example'}
             </Button>
 
-            {/* Botón de Generación Directa / Pago */}
-            <Button 
+            <Button
               onClick={onOpenModal}
               disabled={!canDownload}
               className={`rounded-full h-10 transition-all gap-2 shadow-lg border-b-2 active:border-b-0 active:translate-y-0.5 ${
-                canDownload 
-                ? 'bg-primary hover:bg-primary/90 border-primary-foreground/20 shadow-primary/20 px-4 sm:px-6' 
+                canDownload
+                ? 'bg-primary hover:bg-primary/90 border-primary-foreground/20 shadow-primary/20 px-4 sm:px-6'
                 : 'bg-muted text-muted-foreground opacity-50 px-3 cursor-not-allowed'
               }`}
             >
@@ -66,7 +65,6 @@ const Header = ({ totalDays = 0, onOpenModal }) => {
 
             <div className="h-6 w-[1px] bg-border mx-1 hidden xs:block" />
 
-            {/* Selectores */}
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import Header from '@/components/Header.jsx';
 import Footer from '@/components/Footer.jsx';
@@ -8,7 +9,6 @@ import RangeList from '@/components/RangeList.jsx';
 import ProgressBar from '@/components/ProgressBar.jsx';
 import SummaryCard from '@/components/SummaryCard.jsx';
 import DataAuthoritySection from '@/components/DataAuthoritySection.jsx';
-import AdPlaceholder from '@/components/AdPlaceholder.jsx';
 import UserDetailsModal from '@/components/UserDetailsModal.jsx';
 import { useLanguage } from '@/hooks/useLanguage.js';
 import { mergeDateRanges, calculateUniqueDays } from '@/lib/dateRangeMerger.js';
@@ -16,66 +16,81 @@ import { Shield } from 'lucide-react';
 
 const TaxNomadCalculator = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [selectedRanges, setSelectedRanges] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [userData, setUserData] = useState({ name: '', taxId: '' });
 
-  // Lógica de cálculo
   const { merged } = mergeDateRanges(selectedRanges);
   const totalDays = calculateUniqueDays(merged);
   const LIMIT = 183;
   const remaining = Math.max(LIMIT - totalDays, 0);
   const percentage = Math.min((totalDays / LIMIT) * 100, 100);
 
-  const statusObj = totalDays <= 150 ? { color: 'safe', label: t('progress.safe') } :
-                    totalDays <= 183 ? { color: 'warning', label: t('progress.approaching') } :
-                    { color: 'destructive', label: t('progress.over') };
+  const statusObj = totalDays <= 150
+    ? { color: 'safe',        label: t('progress.safe') }
+    : totalDays <= 183
+    ? { color: 'warning',     label: t('progress.approaching') }
+    : { color: 'destructive', label: t('progress.over') };
 
   const handleAddRange = (range) => {
-    const updatedRanges = [...selectedRanges, range];
-    setSelectedRanges(updatedRanges);
+    setSelectedRanges(prev => [...prev, range]);
     toast.success(t('toast.rangeAdded'));
   };
 
   const handleRemoveRange = (index) => {
-    setSelectedRanges(selectedRanges.filter((_, i) => i !== index));
+    setSelectedRanges(prev => prev.filter((_, i) => i !== index));
     toast.success(t('toast.rangeRemoved'));
   };
 
-  const handleConfirmPurchase = () => {
+  const handleConfirmPurchase = async () => {
     setIsProcessing(true);
-    
-    // SALTÁNDONOS STRIPE - Simulación de generación y descarga
-    toast.success("¡Pago Omitido para Test!", {
-      description: "Generando informe para " + userData.name
-    });
 
-    setTimeout(() => {
-      // Función para descargar un "Reporte" en formato texto/HTML 
-      // (En producción aquí usarías jsPDF)
-      const reportContent = `
-        TAX NOMAD REPORT 2026
-        ---------------------
-        NAME: ${userData.name}
-        TAX ID: ${userData.taxId}
-        TOTAL DAYS IN SPAIN: ${totalDays}
-        STATUS: ${statusObj.label}
-        ---------------------
-        Verified by TaxNomad Calculator Engine.
-      `;
-      
-      const blob = new Blob([reportContent], { type: 'text/plain' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `TaxReport_${userData.name.replace(/\s+/g, '_')}.txt`;
-      link.click();
-      
-      setIsProcessing(false);
+    // Persist session data so payment & success pages can access it
+    const sessionData = {
+      name: userData.name,
+      taxId: userData.taxId,
+      totalDays,
+      statusLabel: statusObj.label,
+      ranges: merged.map(r => ({
+        start: r.start instanceof Date ? r.start.toISOString() : r.start,
+        end:   r.end   instanceof Date ? r.end.toISOString()   : r.end,
+        days:  r.days,
+      })),
+    };
+    sessionStorage.setItem('taxnomad_session', JSON.stringify(sessionData));
+
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:        userData.name,
+          taxId:       userData.taxId,
+          totalDays,
+          statusLabel: statusObj.label,
+        }),
+      });
+
+      if (!res.ok) throw new Error('API error');
+
+      const { url } = await res.json();
+
       setIsModalOpen(false);
-      toast.success("Informe descargado correctamente.");
-    }, 1500);
+      setIsProcessing(false);
+
+      if (url.startsWith('http')) {
+        window.location.href = url; // Real Stripe hosted page
+      } else {
+        navigate(url);              // Internal mock route
+      }
+    } catch {
+      // Dev fallback: no Vercel function running locally
+      setIsModalOpen(false);
+      setIsProcessing(false);
+      navigate('/payment-mock');
+    }
   };
 
   return (
@@ -102,10 +117,10 @@ const TaxNomadCalculator = () => {
             </div>
 
             <div className="w-full lg:w-80 shrink-0 space-y-6">
-              <SummaryCard title={t('stats.totalDays')} value={totalDays} status={statusObj} />
-              <SummaryCard title={t('stats.remainingDays')} value={remaining} status={statusObj} />
-              <SummaryCard title={t('stats.limitUsage')} value={`${percentage.toFixed(1)}%`} status={statusObj} />
-              
+              <SummaryCard title={t('stats.totalDays')}     value={totalDays}                    status={statusObj} />
+              <SummaryCard title={t('stats.remainingDays')} value={remaining}                    status={statusObj} />
+              <SummaryCard title={t('stats.limitUsage')}    value={`${percentage.toFixed(1)}%`}  status={statusObj} />
+
               <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 text-[11px] text-muted-foreground flex gap-3">
                 <Shield className="w-4 h-4 text-primary shrink-0" />
                 <p><strong>Audit-Ready:</strong> Reporte generado bajo estándares de cumplimiento de la UE.</p>
@@ -113,10 +128,10 @@ const TaxNomadCalculator = () => {
             </div>
           </div>
         </main>
-        
+
         <Footer />
 
-        <UserDetailsModal 
+        <UserDetailsModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleConfirmPurchase}
