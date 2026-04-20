@@ -20,11 +20,11 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
 
           {/* Logo */}
           <div
-            className="flex items-center gap-2.5 cursor-pointer shrink-0"
+            className="flex items-center gap-3 cursor-pointer shrink-0"
             onClick={() => navigate('/')}
           >
-            <BrandLogo className="h-[30px] w-[30px] rounded-[9px]" />
-            <span className="text-xl font-black tracking-tighter text-foreground">
+            <BrandLogo className="h-9 w-auto shrink-0" />
+            <span className="text-xl font-black tracking-tighter text-foreground sm:text-[1.45rem]">
               Tax<span className="text-primary">Nomad</span>
             </span>
           </div>

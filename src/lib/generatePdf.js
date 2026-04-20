@@ -1,11 +1,11 @@
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { format, differenceInCalendarDays, eachDayOfInterval, isWithinInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { reportOwner } from '@/lib/reportMetadata.js';
+import { reportOwner } from './reportMetadata.js';
 
 const C = {
-  blue: [37, 99, 235],
-  darkBlue: [30, 58, 138],
+  blue: [71, 100, 158],
+  darkBlue: [46, 72, 122],
   dark: [15, 23, 42],
   gray: [100, 116, 139],
   lightGray: [241, 245, 249],
@@ -13,7 +13,7 @@ const C = {
   orange: [234, 88, 12],
   red: [220, 38, 38],
   white: [255, 255, 255],
-  blueBg: [219, 234, 254],
+  blueBg: [228, 236, 250],
   gold: [245, 158, 11],
 };
 
@@ -41,11 +41,20 @@ function calculateOverlapDays(range, ranges, index) {
   }, 0);
 }
 
+function buildDataUrlFromBlob(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
 let brandLogoDataUrlPromise;
 
 function loadBrandLogoDataUrl() {
   if (!brandLogoDataUrlPromise) {
-    brandLogoDataUrlPromise = fetch('/logo-calculadora-183.webp')
+    brandLogoDataUrlPromise = fetch('/logo-calculadora-183-clean-512.png')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Unable to load logo asset: ${response.status}`);
@@ -53,12 +62,7 @@ function loadBrandLogoDataUrl() {
 
         return response.blob();
       })
-      .then((blob) => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      }));
+      .then(buildDataUrlFromBlob);
   }
 
   return brandLogoDataUrlPromise;
@@ -93,9 +97,10 @@ export async function generateTaxReport({
   ranges = [],
   language = 'es',
   exampleMode = false,
+  brandLogoDataUrl: providedBrandLogoDataUrl,
 }) {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const brandLogoDataUrl = await loadBrandLogoDataUrl();
+  const brandLogoDataUrl = providedBrandLogoDataUrl ?? await loadBrandLogoDataUrl();
   const W = doc.internal.pageSize.getWidth();
   const H = doc.internal.pageSize.getHeight();
   const M = 18;
@@ -107,6 +112,8 @@ export async function generateTaxReport({
   const refNum = `TN-${format(new Date(), 'yyyyMMdd')}-${Math.floor(Math.random() * 9000 + 1000)}`;
   const genDate = format(new Date(), "dd 'de' MMMM 'de' yyyy", { locale: es });
   const sortedRanges = [...ranges].map(normalizeRange).sort((a, b) => a.start.getTime() - b.start.getTime());
+  const rawDays = sortedRanges.reduce((sum, range) => sum + range.days, 0);
+  const overlapDeduction = Math.max(rawDays - totalDays, 0);
   const identifierLabel = documentType === 'nie' ? 'NIE' : 'Pasaporte';
   const fileOwnerLine = `${reportOwner.name} · ${reportOwner.nif} · ${reportOwner.email}`;
 
@@ -115,15 +122,15 @@ export async function generateTaxReport({
   doc.setFillColor(...C.blue);
   doc.rect(0, 0, W, 34, 'F');
 
-  doc.addImage(brandLogoDataUrl, 'WEBP', M, 6.5, 20, 20);
+  doc.addImage(brandLogoDataUrl, 'PNG', M, 6.5, 22, 16.8);
   doc.setTextColor(...C.white);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
-  doc.text('TaxNomad', M + 25, 16);
+  doc.text('TaxNomad', M + 28, 16);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.5);
   doc.setTextColor(208, 227, 255);
-  doc.text('Calculadora de Residencia Fiscal · Regla de los 183 Días', M + 25, 22);
+  doc.text('Calculadora de Residencia Fiscal · Regla de los 183 Días', M + 28, 22);
 
   if (exampleMode) {
     drawPill(doc, W - M - 34, 8, 'EJEMPLO', C.gold, C.white, 18);
@@ -139,12 +146,15 @@ export async function generateTaxReport({
   if (exampleMode) {
     doc.setFillColor(255, 247, 237);
     doc.setDrawColor(251, 146, 60);
-    doc.roundedRect(M, y - 6, CW, 12, 3, 3, 'FD');
+    doc.roundedRect(M, y - 6, CW, 14, 3, 3, 'FD');
     doc.setTextColor(194, 65, 12);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.5);
     doc.text('Informe de ejemplo con datos ficticios', M + 4, y + 0.2);
-    y += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.4);
+    doc.text('Los días solapados se descuentan automáticamente del total único.', M + 4, y + 5.2);
+    y += 10;
   }
 
   doc.setTextColor(...C.dark);
@@ -290,11 +300,11 @@ export async function generateTaxReport({
       if (overlapDays > 0) {
         doc.setFillColor(255, 251, 235);
         doc.setDrawColor(245, 158, 11);
-        doc.roundedRect(M + CW - 27, y + 1.3, 24, 4.4, 1.5, 1.5, 'FD');
+        doc.roundedRect(M + CW - 30, y + 1.1, 27, 4.8, 1.5, 1.5, 'FD');
         doc.setTextColor(146, 64, 14);
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(6.5);
-        doc.text('SOLAPE', M + CW - 15, y + 4.2, { align: 'center' });
+        doc.setFontSize(6.2);
+        doc.text(`${overlapDays} d. solap.`, M + CW - 16.5, y + 4.35, { align: 'center' });
       }
 
       y += 7;
@@ -310,6 +320,24 @@ export async function generateTaxReport({
   doc.text(String(totalDays), colX[2] + colW[2] / 2, y + 4.5, { align: 'center' });
   y += 12;
 
+  if (overlapDeduction > 0) {
+    doc.setFillColor(255, 247, 237);
+    doc.setDrawColor(251, 146, 60);
+    doc.roundedRect(M, y - 1.5, CW, 12, 3, 3, 'FD');
+    doc.setTextColor(154, 52, 18);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.4);
+    doc.text('Tratamiento de solapes', M + 4, y + 2.8);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.2);
+    doc.text(
+      `Se han descartado ${overlapDeduction} día(s) duplicado(s) para obtener el total único de ${totalDays} días en España.`,
+      M + 4,
+      y + 7.1,
+    );
+    y += 16;
+  }
+
   doc.setDrawColor(...C.lightGray);
   doc.line(M, y, W - M, y);
   y += 7;
@@ -321,7 +349,7 @@ export async function generateTaxReport({
 
   const conclusion = totalDays > 183
     ? `A la fecha de generación del presente informe, ${name} ha permanecido ${totalDays} días en territorio español durante el ejercicio fiscal 2026, SUPERANDO el límite de 183 días establecido por el artículo 9 de la Ley 35/2006 del IRPF. Esta circunstancia podría determinar la residencia fiscal habitual en España. Se recomienda consultar urgentemente con un asesor fiscal.`
-    : `A la fecha de generación del presente informe, ${name} ha permanecido ${totalDays} días en territorio español durante el ejercicio fiscal 2026, lo que representa el ${pct.toFixed(1)}% del límite de 183 días establecido por el artículo 9 de la Ley 35/2006 del IRPF. En consecuencia, no se cumple el criterio de permanencia para la residencia fiscal habitual en España por el criterio de los 183 días.`;
+    : `A la fecha de generación del presente informe, ${name} ha permanecido ${totalDays} días en territorio español durante el ejercicio fiscal 2026, lo que representa el ${pct.toFixed(1)}% del límite de 183 días establecido por el artículo 9 de la Ley 35/2006 del IRPF. Con la información facilitada y descontando los solapes entre períodos, no se supera el umbral de permanencia exigido para la residencia fiscal habitual en España por el criterio de los 183 días.`;
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);

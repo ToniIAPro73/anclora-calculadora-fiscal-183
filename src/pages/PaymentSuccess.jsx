@@ -56,7 +56,7 @@ const PaymentSuccess = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6 px-4">
-        <BrandLogo className="h-12 w-12 rounded-2xl" />
+        <BrandLogo className="h-12 w-auto" />
         <h1 className="text-2xl font-black text-foreground">Sesión expirada</h1>
         <p className="text-muted-foreground text-center max-w-sm">
           No se encontró una sesión de pago activa. Si ya pagaste, contacta con soporte.
@@ -79,7 +79,7 @@ const PaymentSuccess = () => {
               <CheckCircle2 className="w-10 h-10 text-green-600" />
             </div>
             <div className="absolute -bottom-1 -right-1">
-              <BrandLogo className="h-7 w-7 rounded-lg shadow-sm" />
+              <BrandLogo className="h-7 w-auto drop-shadow-sm" />
             </div>
           </div>
           <div>

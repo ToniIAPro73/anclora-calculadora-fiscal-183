@@ -36,7 +36,7 @@ const PaymentMock = () => {
           {/* Left: Product summary */}
           <div className="md:w-5/12 bg-[#1a1f2e] text-white p-8 flex flex-col gap-6">
             <div className="flex items-center gap-3">
-              <BrandLogo className="h-9 w-9 rounded-xl" />
+              <BrandLogo className="h-11 w-auto shrink-0" />
               <div>
                 <p className="font-black text-lg leading-tight">TaxNomad</p>
                 <p className="text-blue-300 text-xs">Informe de Residencia Fiscal</p>
