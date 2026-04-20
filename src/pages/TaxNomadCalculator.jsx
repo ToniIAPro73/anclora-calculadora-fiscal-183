@@ -105,9 +105,15 @@ const TaxNomadCalculator = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name:        userData.name,
+          documentType: userData.documentType,
           taxId:       userData.taxId,
           totalDays,
           statusLabel: statusObj.label,
+          ranges: selectedRanges.map(r => ({
+            start: r.start instanceof Date ? r.start.toISOString() : r.start,
+            end:   r.end   instanceof Date ? r.end.toISOString()   : r.end,
+            days:  r.days,
+          })),
         }),
       });
 

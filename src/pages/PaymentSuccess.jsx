@@ -10,26 +10,131 @@ const PaymentSuccess = () => {
   const [session, setSession] = useState(null);
   const [downloaded, setDownloaded] = useState(false);
   const [error, setError] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('Verificando pago...');
 
   useEffect(() => {
-    const raw = sessionStorage.getItem('taxnomad_session');
-    if (raw) {
-      try {
-        const data = JSON.parse(raw);
-        setSession(data);
-        // Auto-download the PDF
-        void downloadPdf(data);
-        // Clean up session data after use
-        sessionStorage.removeItem('taxnomad_session');
-      } catch {
-        setError(true);
-      }
-    } else {
-      // Could be a real Stripe success redirect — session_id in URL
-      const params = new URLSearchParams(window.location.search);
-      if (!params.get('session_id')) setError(true);
-    }
+    void bootstrapPaymentState();
   }, []);
+
+  const normalizeRanges = (ranges = []) =>
+    ranges
+      .map((range) => {
+        const start = range?.start ?? range?.entryDate ?? null;
+        const end = range?.end ?? range?.exitDate ?? null;
+
+        if (!start || !end) {
+          return null;
+        }
+
+        return {
+          start,
+          end,
+          days: Number(range?.days ?? 0),
+        };
+      })
+      .filter(Boolean);
+
+  const bootstrapPaymentState = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+
+    if (sessionId) {
+      await verifyStripeSession(sessionId);
+      return;
+    }
+
+    // Mock/dev flow: still relies on local state, but only when there is no Stripe session_id.
+    hydrateFromLocalSession({ autoDownload: true });
+  };
+
+  const hydrateFromLocalSession = ({ autoDownload = false, silentIfMissing = false } = {}) => {
+    const raw = sessionStorage.getItem('taxnomad_session');
+    if (!raw) {
+      if (!silentIfMissing) {
+        setError(true);
+        setStatusMessage('No se encontró una sesión de pago válida.');
+      }
+      return null;
+    }
+
+    try {
+      const data = JSON.parse(raw);
+      const normalizedData = {
+        ...data,
+        ranges: normalizeRanges(data.ranges),
+      };
+
+      setSession(normalizedData);
+      sessionStorage.removeItem('taxnomad_session');
+
+      if (autoDownload) {
+        void downloadPdf(normalizedData);
+      }
+
+      return normalizedData;
+    } catch {
+      if (!silentIfMissing) {
+        setError(true);
+        setStatusMessage('No se pudo recuperar la sesión local de pago.');
+      }
+      return null;
+    }
+  };
+
+  const verifyStripeSession = async (sessionId) => {
+    try {
+      const response = await fetch(`/api/checkout-session-status?session_id=${encodeURIComponent(sessionId)}`);
+      if (!response.ok) {
+        throw new Error('Verification request failed');
+      }
+
+      const verifiedSession = await response.json();
+      if (!verifiedSession.verified) {
+        setError(true);
+        setStatusMessage('Stripe no ha confirmado el pago de esta sesión.');
+        return;
+      }
+
+      const localSession = hydrateFromLocalSession({ silentIfMissing: true });
+      const reportPayload = verifiedSession.report_payload || {};
+      const normalizedReportRanges = normalizeRanges(reportPayload.ranges);
+
+      const mergedSession = localSession
+        ? {
+            ...localSession,
+            name: reportPayload.name || localSession.name,
+            taxId: reportPayload.taxId || localSession.taxId,
+            documentType: reportPayload.documentType || localSession.documentType,
+            totalDays: Number(reportPayload.totalDays || localSession.totalDays),
+            statusLabel: reportPayload.statusLabel || localSession.statusLabel,
+            ranges: normalizedReportRanges.length > 0
+              ? normalizedReportRanges
+              : localSession.ranges,
+          }
+        : {
+            name: reportPayload.name,
+            taxId: reportPayload.taxId,
+            documentType: reportPayload.documentType || 'passport',
+            totalDays: Number(reportPayload.totalDays || 0),
+            statusLabel: reportPayload.statusLabel,
+            ranges: normalizedReportRanges,
+          };
+
+      if (!mergedSession.name || !mergedSession.taxId || !Array.isArray(mergedSession.ranges) || mergedSession.ranges.length === 0) {
+        setError(true);
+        setStatusMessage('Pago verificado, pero faltan datos suficientes para regenerar el PDF.');
+        return;
+      }
+
+      setSession(mergedSession);
+      setStatusMessage('Pago verificado correctamente.');
+      await downloadPdf(mergedSession);
+    } catch (verificationError) {
+      console.error('Stripe session verification error:', verificationError);
+      setError(true);
+      setStatusMessage('No se pudo verificar el pago con Stripe.');
+    }
+  };
 
   const downloadPdf = async (data) => {
     try {
@@ -44,8 +149,10 @@ const PaymentSuccess = () => {
       const safeName = (data.name || 'informe').replace(/\s+/g, '_');
       doc.save(`TaxNomad_Informe_${safeName}_2026.pdf`);
       setDownloaded(true);
+      setStatusMessage('PDF descargado automáticamente.');
     } catch (err) {
       console.error('PDF generation error:', err);
+      setStatusMessage('El pago está validado, pero hubo un error al generar el PDF.');
     }
   };
 
@@ -59,7 +166,7 @@ const PaymentSuccess = () => {
         <BrandLogo className="h-12 w-auto" />
         <h1 className="text-2xl font-black text-foreground">Sesión expirada</h1>
         <p className="text-muted-foreground text-center max-w-sm">
-          No se encontró una sesión de pago activa. Si ya pagaste, contacta con soporte.
+          {statusMessage}
         </p>
         <Button onClick={() => navigate('/')} variant="outline">
           <ArrowLeft className="w-4 h-4 mr-2" /> Volver al calculador
@@ -87,7 +194,7 @@ const PaymentSuccess = () => {
               ¡Pago completado!
             </h1>
             <p className="text-muted-foreground mt-1">
-              Tu informe fiscal está listo.
+              {statusMessage}
             </p>
           </div>
         </div>
