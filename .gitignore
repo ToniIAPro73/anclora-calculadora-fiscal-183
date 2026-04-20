@@ -1,0 +1,36 @@
+# Dependencias de Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Archivos de entorno (Seguridad Crítica)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs de error y depuración
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos del Sistema y Basura de Windows
+.DS_Store
+Thumbs.db
+*.Zone.Identifier
+desktop.ini
+
+# Configuración de Editores (Opcional pero recomendado)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporales de compilación de Vite
+*.timestamp-*
