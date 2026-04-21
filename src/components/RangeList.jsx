@@ -1,76 +1,91 @@
-
 import React from 'react';
 import { format } from 'date-fns';
-import { Trash2, CalendarDays, TriangleAlert } from 'lucide-react';
+import { CalendarBlank, PencilSimpleLine, Trash, Clock } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLanguage } from '@/hooks/useLanguage.js';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const RangeList = ({ ranges, onRemoveRange }) => {
+const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
   const { t } = useLanguage();
 
+  if (ranges.length === 0) return null;
+
   return (
-    <TooltipProvider>
-      <Card className="border-border bg-card rounded-[20px] overflow-hidden">
-        <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <CalendarDays className="h-5 w-5 text-primary" />
-            {t('rangeList.title')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          {ranges.length === 0 ? (
-            <div className="p-8 text-center text-muted-foreground text-sm">
-              {t('rangeList.empty')}
-            </div>
-          ) : (
-            <ul className="max-h-[300px] overflow-y-auto divide-y divide-border/50">
-              {ranges.map((range, index) => (
-                <li
-                  key={index}
-                  className="flex items-center justify-between gap-4 p-4 transition-colors hover:bg-muted/50 group"
-                >
-                  <div className="min-w-0">
-                    <div className="font-medium text-sm text-foreground flex items-center gap-2 flex-wrap">
-                      <span>
-                        {format(range.start, 'MMM d, yyyy')} <span className="text-muted-foreground mx-1">→</span> {format(range.end, 'MMM d, yyyy')}
-                      </span>
-                      {range.overlapDays > 0 && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-300">
-                              <TriangleAlert className="h-3 w-3" />
-                              {t('rangeList.overlapLabel')}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-[220px] text-center">
-                            {t('rangeList.overlapTooltip')}
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {range.days} {range.days === 1 ? t('dateSelector.day') : t('dateSelector.days')}
-                      {range.overlapDays > 0 && ` · ${range.overlapDays} ${range.overlapDays === 1 ? t('dateSelector.day') : t('dateSelector.days')} ${t('rangeList.overlapLabel').toLowerCase()}`}
-                    </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between px-2">
+        <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white/40">
+          {t('rangeList.title')}
+        </h3>
+        <div className="flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-medium text-muted-foreground">
+          <CalendarBlank size={14} />
+          {ranges.length} {ranges.length === 1 ? 'rango' : 'rangos'}
+        </div>
+      </div>
+
+      <div className="grid gap-4">
+        {ranges.map((range, index) => (
+          <div
+            key={`${range.start.toISOString()}-${range.end.toISOString()}-${index}`}
+            className="group relative overflow-hidden rounded-[24px] border border-white/5 bg-[#0d1320] transition-all duration-500 hover:border-white/10 hover:bg-[#0f172a]"
+          >
+            <div className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-1 flex-col gap-6 sm:flex-row sm:items-center sm:gap-12">
+                {/* Duration Badge */}
+                <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-2xl border border-primary/20 bg-primary/10">
+                  <span className="text-2xl font-[800] tracking-tight text-primary">{range.days}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary/70">{t('dateSelector.days')}</span>
+                </div>
+
+                {/* Dates */}
+                <div className="grid grid-cols-2 gap-8 sm:gap-16">
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      {t('rangeList.from')}
+                    </p>
+                    <p className="text-lg font-bold text-white">
+                      {format(range.start, 'dd MMM')}
+                      <span className="ml-1 text-xs font-medium text-muted-foreground">{format(range.start, 'yyyy')}</span>
+                    </p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onRemoveRange(index)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    aria-label={t('rangeList.delete')}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-    </TooltipProvider>
+
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      {t('rangeList.to')}
+                    </p>
+                    <p className="text-lg font-bold text-white">
+                      {format(range.end, 'dd MMM')}
+                      <span className="ml-1 text-xs font-medium text-muted-foreground">{format(range.end, 'yyyy')}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2 border-t border-white/5 pt-4 sm:border-t-0 sm:pt-0">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onEditRange(index)}
+                  className="h-10 rounded-full bg-white/5 px-4 text-xs font-bold uppercase tracking-widest hover:bg-white/10"
+                >
+                  <PencilSimpleLine className="mr-2" size={16} weight="bold" />
+                  {t('rangeList.edit')}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onRemoveRange(index)}
+                  className="h-10 w-10 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <Trash size={18} weight="bold" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

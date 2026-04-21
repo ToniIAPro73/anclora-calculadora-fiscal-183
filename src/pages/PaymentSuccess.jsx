@@ -179,7 +179,7 @@ const PaymentSuccess = () => {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
       <div className="max-w-md w-full text-center space-y-8">
 
-        {/* Success icon */}
+        {/* Delivery header */}
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
             <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -190,11 +190,15 @@ const PaymentSuccess = () => {
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-foreground">
-              ¡Pago completado!
+            <div className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 dark:border-green-900/60 dark:bg-green-900/20 dark:text-green-400">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              Pago verificado correctamente
+            </div>
+            <h1 className="mt-4 text-3xl font-black tracking-tight text-foreground">
+              Tu informe ya está listo
             </h1>
-            <p className="text-muted-foreground mt-1">
-              {statusMessage}
+            <p className="text-muted-foreground mt-2 max-w-sm">
+              Ya puedes descargar tu informe premium de residencia fiscal. Esta pantalla está pensada para la entrega del documento, no para repetir la confirmación del checkout.
             </p>
           </div>
         </div>
@@ -233,19 +237,33 @@ const PaymentSuccess = () => {
           </div>
         )}
 
+        <div className="rounded-2xl border border-border bg-background/70 p-5 text-left space-y-3 shadow-sm">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 rounded-full bg-primary/10 p-2 text-primary">
+              <Download className="h-4 w-4" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-bold text-foreground">Siguiente paso</p>
+              <p className="text-sm text-muted-foreground">
+                Descarga tu PDF y guárdalo como respaldo fiscal. Si la descarga automática no se ha abierto, puedes lanzarla manualmente desde aquí.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Download status */}
         {downloaded ? (
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-700 dark:text-green-400 flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
-              PDF descargado automáticamente
+              {statusMessage}
             </div>
             <Button
               onClick={handleDownloadAgain}
               variant="outline"
               className="w-full rounded-full h-11 font-semibold gap-2"
             >
-              <Download className="w-4 h-4" /> Descargar de nuevo
+              <Download className="w-4 h-4" /> Descargar informe otra vez
             </Button>
           </div>
         ) : (

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { FileText, Lock, Check } from 'lucide-react';
+import { Article, CheckCircle, LockKey } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
 const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, isLoading }) => {
@@ -21,15 +21,17 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] rounded-3xl">
+      <DialogContent className="sm:max-w-[480px] rounded-[2rem] border-white/10 bg-card/95 p-0">
+        <div className="double-shell rounded-[2rem]">
+          <div className="double-shell-core rounded-[calc(2rem-0.375rem)] px-6 py-6">
         <DialogHeader>
-          <div className="mx-auto bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-            <FileText className="text-primary w-6 h-6" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
+            <Article className="text-primary" size={24} weight="light" />
           </div>
-          <DialogTitle className="text-2xl font-black text-center">
+          <DialogTitle className="text-center text-2xl font-[650] tracking-[-0.05em]">
             {t('userDetails.title')}
           </DialogTitle>
-          <DialogDescription className="text-center italic">
+          <DialogDescription className="text-center text-sm leading-7">
             {t('userDetails.description')}
           </DialogDescription>
         </DialogHeader>
@@ -55,13 +57,13 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
                     type="button"
                     onClick={() => setUserData({ ...userData, documentType: option.value })}
                     className={cn(
-                      "flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition-all",
+                      "flex items-center justify-center gap-2 rounded-[1.25rem] border px-3 py-3 text-sm font-semibold transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]",
                       isSelected
-                        ? "border-primary bg-primary/10 text-primary shadow-sm"
+                        ? "border-primary/20 bg-primary/10 text-primary shadow-[0_18px_36px_-24px_hsl(var(--primary)/0.8)]"
                         : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground"
                     )}
                   >
-                    {isSelected && <Check className="h-4 w-4" />}
+                    {isSelected && <CheckCircle size={16} weight="fill" />}
                     <span>{option.label}</span>
                   </button>
                 );
@@ -88,14 +90,16 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
           <Button
             onClick={onConfirm}
             disabled={isLoading || !userData.name || !userData.taxId}
-            className="w-full rounded-full h-12 font-bold text-base shadow-lg gap-2"
+            className="h-12 w-full gap-2 text-base font-semibold"
           >
-            <Lock className="w-4 h-4" />
+            <LockKey size={16} weight="bold" />
             {isLoading
               ? t('userDetails.redirecting')
               : `${t('userDetails.confirm')} · 9,99 €`}
           </Button>
         </DialogFooter>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

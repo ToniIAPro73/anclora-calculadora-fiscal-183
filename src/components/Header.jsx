@@ -1,6 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Moon, Sun, FileDown, Eye, Lock } from 'lucide-react';
+import {
+  ArrowUpRight,
+  FileArrowDown,
+  GlobeHemisphereWest,
+  LockKey,
+  MoonStars,
+  SunHorizon,
+} from '@phosphor-icons/react';
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -14,82 +21,72 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
   const canDownload = totalDays > 0;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 sm:h-20 items-center justify-between gap-3 sm:gap-4">
-
-          {/* Logo */}
+    <header className="sticky top-0 z-50 px-4 pt-5 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1480px]">
+        <div className="double-shell">
+          <div className="double-shell-core flex min-h-[72px] items-center justify-between gap-3 px-4 sm:px-5">
           <div
-            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0"
+            className="flex cursor-pointer items-center gap-3 shrink-0"
             onClick={() => navigate('/')}
           >
             <BrandLogo
               variant={theme === 'dark' ? 'dark' : 'light'}
               className="h-11 sm:h-14 w-auto shrink-0"
             />
-            <span className="text-lg sm:text-2xl font-black tracking-tighter text-foreground">
+            <span className="text-lg font-[700] tracking-[-0.06em] text-foreground sm:text-2xl">
               Tax<span className="text-primary">Nomad</span>
             </span>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-2">
+            <Button
+              onClick={onOpenModal}
+              disabled={!canDownload}
+              className={`group hidden h-11 items-center gap-3 px-2 pl-5 sm:inline-flex ${
+                canDownload
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground'
+              }`}
+            >
+              <span className="text-sm font-semibold">{t('actions.generatePdf')} · 9,99 €</span>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/15 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-[1px]">
+                {canDownload ? <FileArrowDown size={16} weight="bold" /> : <LockKey size={16} weight="bold" />}
+              </span>
+            </Button>
 
             {onOpenExample && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onOpenExample}
-                className="hidden md:flex text-muted-foreground hover:text-primary gap-2 font-semibold"
+                className="hidden text-muted-foreground md:inline-flex"
               >
-                <Eye className="w-4 h-4" />
                 {t('actions.viewExample')}
+                <ArrowUpRight size={14} weight="bold" />
               </Button>
             )}
-
-            <Button
-              onClick={onOpenModal}
-              disabled={!canDownload}
-              className={`rounded-full h-10 transition-all gap-2 shadow-lg border-b-2 active:border-b-0 active:translate-y-0.5 ${
-                canDownload
-                ? 'bg-primary hover:bg-primary/90 border-primary-foreground/20 shadow-primary/20 px-4 sm:px-6'
-                : 'bg-muted text-muted-foreground opacity-50 px-3 cursor-not-allowed'
-              }`}
-            >
-              <FileDown className="w-4 h-4" />
-              <span className="font-bold flex items-center gap-1.5 text-sm">
-                <span className="hidden sm:inline">
-                  {language === 'es' ? 'Generar PDF' : 'Generate PDF'}
-                </span>
-                <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">
-                  9,99€
-                </span>
-              </span>
-              <Lock className="w-3 h-3 opacity-50 hidden xs:block" />
-            </Button>
-
-            <div className="h-6 w-[1px] bg-border mx-1 hidden xs:block" />
 
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
-                className="rounded-full h-9 w-9"
+                className="h-10 w-10 rounded-full border border-white/8 bg-white/[0.03]"
               >
-                <Globe className="h-4 w-4" />
+                <GlobeHemisphereWest size={18} weight="light" />
               </Button>
 
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="rounded-full h-9 w-9"
+                className="h-10 w-10 rounded-full border border-white/8 bg-white/[0.03]"
               >
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {theme === "dark" ? <SunHorizon size={18} weight="light" /> : <MoonStars size={18} weight="light" />}
               </Button>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </header>
