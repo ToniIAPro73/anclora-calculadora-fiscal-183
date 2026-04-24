@@ -11,6 +11,12 @@
 		<link rel="manifest" href="/site.webmanifest" />
 		<meta name="msapplication-config" content="/browserconfig.xml" />
 		<meta name="theme-color" content="#001a33" />
+
+		<!-- Preconnect para Google Fonts (no bloquea renderizado) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"></noscript>
 		
 		<title>Calculadora Nómada Fiscal 183 Días | 2026 Audit Ready</title>
 		<meta name="description" content="Calcula tu residencia fiscal en España y la UE de forma precisa con nuestra herramienta que evita el solapamiento de fechas.">

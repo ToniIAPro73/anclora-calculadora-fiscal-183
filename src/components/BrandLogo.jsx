@@ -10,6 +10,8 @@ const BrandLogo = ({
       src={logoSource}
       alt={alt}
       className={`block object-contain ${className}`.trim()}
+      width="256"
+      height="256"
       loading="eager"
       decoding="async"
     />
