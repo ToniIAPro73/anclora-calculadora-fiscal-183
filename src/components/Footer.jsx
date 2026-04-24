@@ -41,7 +41,10 @@ const Footer = () => {
 
         <div className="flex items-center justify-between border-t border-border/70 pt-8 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
           <span>© {currentYear} {t('footer.copyrightShort')}</span>
-          <a href="/llms.txt" className="transition-colors duration-200 hover:text-foreground">{t('footer.docs')}</a>
+          <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
+            <a href="/llms.txt" className="transition-colors duration-200 hover:text-foreground">{t('footer.docs')}</a>
+            <a href="/openapi.json" className="transition-colors duration-200 hover:text-foreground">{t('footer.openApi')}</a>
+          </div>
         </div>
       </div>
     </footer>

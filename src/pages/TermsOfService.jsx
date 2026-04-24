@@ -4,10 +4,12 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Scale, CreditCard, AlertCircle, CheckCircle2, Globe, ShieldAlert } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getCanonicalUrl, getDefaultUrl } from '@/lib/seo.js';
 
 const contentByLanguage = {
   es: {
     title: 'Términos de Servicio · TaxNomad',
+    description: 'Terminos legales de uso de la Calculadora Nomada Fiscal 183 Dias para residencia fiscal en Espana y la UE.',
     updatedAt: 'Última actualización: 20 de abril de 2026',
     heading: 'Términos de Servicio',
     intro: 'Condiciones legales de uso del servicio TaxNomad. Léelas antes de realizar cualquier compra.',
@@ -60,6 +62,7 @@ const contentByLanguage = {
   },
   en: {
     title: 'Terms of Service · TaxNomad',
+    description: 'Terms of use and legal conditions for the 183-Day Tax Nomad Calculator for Spain and EU tax residency.',
     updatedAt: 'Last updated: April 20, 2026',
     heading: 'Terms of Service',
     intro: 'Legal terms governing the use of the TaxNomad service. Please read them before purchasing.',
@@ -118,7 +121,14 @@ const TermsOfService = () => {
 
   return (
     <>
-      <Helmet><title>{content.title}</title></Helmet>
+      <Helmet>
+        <title>{content.title}</title>
+        <meta name="description" content={content.description} />
+        <link rel="canonical" href={getCanonicalUrl(language, '/terms')} />
+        <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/terms')} />
+        <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/terms')} />
+        <link rel="alternate" hrefLang="x-default" href={`${getDefaultUrl()}terms`} />
+      </Helmet>
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
         <main className="flex-1 max-w-5xl mx-auto px-6 py-16 w-full">

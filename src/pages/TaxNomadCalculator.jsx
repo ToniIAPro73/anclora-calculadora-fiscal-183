@@ -20,6 +20,7 @@ import DataAuthoritySection from '@/components/DataAuthoritySection.jsx';
 import { useLanguage } from '@/hooks/useLanguage.js';
 import { mergeDateRanges, calculateUniqueDays } from '@/lib/dateRangeMerger.js';
 import { buildExampleReportPayload } from '@/lib/reportMetadata.js';
+import { getCanonicalUrl, getDefaultUrl } from '@/lib/seo.js';
 
 const UserDetailsModal = lazy(() => import('@/components/UserDetailsModal.jsx'));
 
@@ -39,6 +40,50 @@ const TaxNomadCalculator = () => {
   const LIMIT = 183;
   const remaining = Math.max(LIMIT - totalDays, 0);
   const percentage = Math.min((totalDays / LIMIT) * 100, 100);
+  const canonicalUrl = getCanonicalUrl(language);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: t('authority.whatIsTitle'),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: t('authority.whatIsDesc'),
+        },
+      },
+      {
+        '@type': 'Question',
+        name: t('authority.whatCountsTitle'),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: [
+            t('authority.whatCountsDesc'),
+            t('authority.whatCountsList1'),
+            t('authority.whatCountsList2'),
+            t('authority.whatCountsList3'),
+            t('authority.whatCountsList4'),
+          ].join(' '),
+        },
+      },
+      {
+        '@type': 'Question',
+        name: t('authority.exceptionsTitle'),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: [
+            t('authority.exceptionsDesc'),
+            t('authority.exceptionsList1'),
+            t('authority.exceptionsList2'),
+            t('authority.exceptionsList3'),
+            t('authority.exceptionsList4'),
+            t('authority.exceptionsList5'),
+          ].join(' '),
+        },
+      },
+    ],
+  };
 
   const statusObj = totalDays <= 150
     ? { color: 'safe',        label: t('progress.safe') }
@@ -186,6 +231,12 @@ const TaxNomadCalculator = () => {
     <>
       <Helmet>
         <title>{t('meta.title')}</title>
+        <meta name="description" content={t('meta.description')} />
+        <link rel="canonical" href={canonicalUrl} />
+        <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es')} />
+        <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en')} />
+        <link rel="alternate" hrefLang="x-default" href={getDefaultUrl()} />
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <DateRangeSelector

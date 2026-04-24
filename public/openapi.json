@@ -1,0 +1,295 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TaxNomad 183-Day Residency API",
+    "version": "1.0.0",
+    "description": "Machine-readable API contract for calculating Spain/EU 183-day fiscal residency summaries and purchasing audit-ready PDF reports."
+  },
+  "servers": [
+    {
+      "url": "https://regla183.com"
+    }
+  ],
+  "paths": {
+    "/api/calculate-residency": {
+      "post": {
+        "summary": "Calculate unique presence days",
+        "description": "Merges overlapping date ranges and returns a fiscal residency summary against the 183-day threshold.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculateResidencyRequest"
+              },
+              "examples": {
+                "basic": {
+                  "value": {
+                    "fiscalYear": 2026,
+                    "ranges": [
+                      {
+                        "start": "2026-01-10",
+                        "end": "2026-02-20"
+                      },
+                      {
+                        "start": "2026-02-15",
+                        "end": "2026-03-01"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Residency calculation summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculateResidencyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          }
+        }
+      }
+    },
+    "/api/create-checkout-session": {
+      "post": {
+        "summary": "Create a Stripe checkout session",
+        "description": "Creates a checkout session for the premium audit-ready PDF report.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCheckoutSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Checkout URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "mode": {
+                      "type": "string",
+                      "enum": ["stripe", "mock_dev"]
+                    }
+                  },
+                  "required": ["url", "mode"]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          }
+        }
+      }
+    },
+    "/api/checkout-session-status": {
+      "get": {
+        "summary": "Verify checkout session",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delivery_token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Checkout verification status"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DateRange": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date"
+          },
+          "end": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": ["start", "end"]
+      },
+      "CalculateResidencyRequest": {
+        "type": "object",
+        "properties": {
+          "fiscalYear": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2100
+          },
+          "limit": {
+            "type": "integer",
+            "default": 183
+          },
+          "warningThreshold": {
+            "type": "integer",
+            "default": 150
+          },
+          "ranges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DateRange"
+            },
+            "minItems": 1,
+            "maxItems": 366
+          }
+        },
+        "required": ["ranges"]
+      },
+      "CalculateResidencyResponse": {
+        "type": "object",
+        "properties": {
+          "fiscalYear": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "warningThreshold": {
+            "type": "integer"
+          },
+          "totalDays": {
+            "type": "integer"
+          },
+          "remainingDays": {
+            "type": "integer"
+          },
+          "exceededDays": {
+            "type": "integer"
+          },
+          "percentageUsed": {
+            "type": "number"
+          },
+          "hasOverlap": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["safe", "warning", "destructive"]
+          },
+          "mergedRanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CalculatedRange"
+            }
+          },
+          "annotatedRanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CalculatedRange"
+            }
+          }
+        },
+        "required": ["fiscalYear", "limit", "totalDays", "remainingDays", "exceededDays", "percentageUsed", "hasOverlap", "status", "mergedRanges", "annotatedRanges"]
+      },
+      "CalculatedRange": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DateRange"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "days": {
+                "type": "integer"
+              },
+              "overlapDays": {
+                "type": "integer"
+              }
+            },
+            "required": ["days"]
+          }
+        ]
+      },
+      "CreateCheckoutSessionRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "taxId": {
+            "type": "string"
+          },
+          "documentType": {
+            "type": "string",
+            "enum": ["passport", "nie"]
+          },
+          "language": {
+            "type": "string",
+            "enum": ["es", "en"]
+          },
+          "fiscalYear": {
+            "type": "integer"
+          },
+          "ranges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DateRange"
+            }
+          }
+        },
+        "required": ["name", "email", "taxId", "ranges"]
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid request"
+      },
+      "MethodNotAllowed": {
+        "description": "HTTP method not allowed"
+      }
+    }
+  }
+}

@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://regla183.com/sitemap.xml

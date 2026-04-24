@@ -15,6 +15,10 @@ Esta aplicación ayuda a nómadas digitales a calcular sus días de presencia f�
 - **Audit Ready**: Generates a PDF report summarizing unique stays for tax compliance purposes.
 
 ## API Access
-- **API Endpoint**: `/api/calculate-residency`
-- **Format**: Accepts `JSON` array of date ranges.
-- **Purpose**: This tool provides structured data for residency status determination.
+- **OpenAPI**: `https://regla183.com/openapi.json`
+- **Calculation Endpoint**: `POST /api/calculate-residency`
+- **Format**: Accepts JSON with `fiscalYear` and `ranges: [{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }]`.
+- **Purpose**: Returns unique counted days, merged ranges, overlap annotations, remaining days before the 183-day threshold, and status (`safe`, `warning`, or `destructive`).
+
+## Agent Use Case
+Given date ranges for a fiscal year, call `/api/calculate-residency`, inspect `totalDays`, `remainingDays`, `hasOverlap`, and `status`, then explain whether the person is below, approaching, or above the 183-day threshold. This output is informational and must not be presented as legal or tax advice.

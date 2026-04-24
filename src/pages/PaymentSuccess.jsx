@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, Download, ArrowLeft, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -180,16 +181,22 @@ const PaymentSuccess = () => {
 
   if (error) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-4">
-        <BrandLogo className="h-12 w-auto" />
-        <h1 className="text-2xl font-bold text-foreground">{t('payment.expiredTitle')}</h1>
-        <p className="text-muted-foreground text-center max-w-sm">
-          {statusMessage}
-        </p>
-        <Button onClick={() => navigate('/')} variant="outline" className="rounded-md">
-          <ArrowLeft className="mr-2 h-4 w-4" /> {t('payment.backToCalculator')}
-        </Button>
-      </div>
+      <>
+        <Helmet>
+          <title>Payment Status - TaxNomad</title>
+          <meta name="robots" content="noindex,follow" />
+        </Helmet>
+        <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-4">
+          <BrandLogo className="h-12 w-auto" />
+          <h1 className="text-2xl font-bold text-foreground">{t('payment.expiredTitle')}</h1>
+          <p className="text-muted-foreground text-center max-w-sm">
+            {statusMessage}
+          </p>
+          <Button onClick={() => navigate('/')} variant="outline" className="rounded-md">
+            <ArrowLeft className="mr-2 h-4 w-4" /> {t('payment.backToCalculator')}
+          </Button>
+        </div>
+      </>
     );
   }
 
@@ -200,7 +207,12 @@ const PaymentSuccess = () => {
       : t('progress.safe');
 
   return (
-    <div className="flex min-h-[100dvh] items-center justify-center overflow-hidden bg-background px-4 py-4">
+    <>
+      <Helmet>
+        <title>Payment Success - TaxNomad</title>
+        <meta name="robots" content="noindex,follow" />
+      </Helmet>
+      <div className="flex min-h-[100dvh] items-center justify-center overflow-hidden bg-background px-4 py-4">
       <div className="grid w-full max-w-5xl gap-4 rounded-2xl border border-border bg-card p-4 shadow-2xl shadow-black/20 md:p-5 lg:grid-cols-[0.78fr_1.22fr] lg:items-stretch">
         <section className="flex min-h-0 flex-col justify-between rounded-xl border border-border bg-muted/25 p-5 text-left">
           <div className="space-y-4">
@@ -301,7 +313,8 @@ const PaymentSuccess = () => {
           </div>
         </section>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

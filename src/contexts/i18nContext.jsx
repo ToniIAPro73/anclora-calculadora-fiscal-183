@@ -3,15 +3,33 @@ import { translations } from '@/lib/translations.js';
 
 export const I18nContext = createContext();
 
-export const I18nProvider = ({ children }) => {
+const isSupportedLanguage = (value) => value === 'es' || value === 'en';
+
+export const I18nProvider = ({ children, initialLanguage }) => {
   const [language, setLanguage] = useState(() => {
+    if (isSupportedLanguage(initialLanguage)) {
+      return initialLanguage;
+    }
+
     const savedLang = localStorage.getItem('language');
-    return savedLang || 'en';
+    return isSupportedLanguage(savedLang) ? savedLang : 'es';
   });
 
   useEffect(() => {
+    if (isSupportedLanguage(initialLanguage)) {
+      setLanguage(initialLanguage);
+    }
+  }, [initialLanguage]);
+
+  const updateLanguage = (nextLanguage) => {
+    if (isSupportedLanguage(nextLanguage)) {
+      setLanguage(nextLanguage);
+    }
+  };
+
+  useEffect(() => {
     localStorage.setItem('language', language);
-    document.documentElement.lang = language;
+    document.documentElement.lang = language === 'es' ? 'es' : 'en';
   }, [language]);
 
   const t = (key) => {
@@ -28,7 +46,7 @@ export const I18nProvider = ({ children }) => {
   };
 
   return (
-    <I18nContext.Provider value={{ language, setLanguage, t }}>
+    <I18nContext.Provider value={{ language, setLanguage: updateLanguage, t }}>
       {children}
     </I18nContext.Provider>
   );

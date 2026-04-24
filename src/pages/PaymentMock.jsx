@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ShieldCheck, FileText, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,11 +26,16 @@ const PaymentMock = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <div className="flex items-center justify-center gap-2 bg-[hsl(var(--warning))] py-2 text-center text-sm font-semibold text-[hsl(var(--warning-foreground))]">
+    <>
+      <Helmet>
+        <title>Payment Mock - TaxNomad</title>
+        <meta name="robots" content="noindex,follow" />
+      </Helmet>
+      <div className="flex min-h-screen flex-col bg-background">
+        <div className="flex items-center justify-center gap-2 bg-[hsl(var(--warning))] py-2 text-center text-sm font-semibold text-[hsl(var(--warning-foreground))]">
         <AlertTriangle className="w-4 h-4" />
         {t('paymentMock.banner')}
-      </div>
+        </div>
 
       <div className="flex flex-1 items-start justify-center px-4 pt-10">
         <div className="flex w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-border bg-card shadow-xl md:flex-row">
@@ -161,7 +167,8 @@ const PaymentMock = () => {
       <p className="py-6 text-center text-xs text-muted-foreground">
         TaxNomad · Calculadora de Residencia Fiscal {session?.fiscalYear || new Date().getFullYear()}
       </p>
-    </div>
+      </div>
+    </>
   );
 };
 

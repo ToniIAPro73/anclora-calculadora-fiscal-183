@@ -4,10 +4,12 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ShieldCheck, Eye, Lock, Mail, FileText, UserCheck, Trash2, Globe } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getCanonicalUrl, getDefaultUrl } from '@/lib/seo.js';
 
 const contentByLanguage = {
   es: {
     title: 'Política de Privacidad · TaxNomad',
+    description: 'Politica de privacidad para usuarios que calculan su residencia fiscal en Espana y la UE con la regla de 183 dias.',
     updatedAt: 'Última actualización: 20 de abril de 2026',
     heading: 'Política de Privacidad',
     intro: 'Transparencia total sobre el tratamiento de tus datos personales.',
@@ -123,6 +125,7 @@ const contentByLanguage = {
   },
   en: {
     title: 'Privacy Policy · TaxNomad',
+    description: 'Privacy policy for users calculating tax residency in Spain and the EU with the 183-day rule.',
     updatedAt: 'Last updated: April 20, 2026',
     heading: 'Privacy Policy',
     intro: 'Full transparency about how your personal data is processed.',
@@ -244,7 +247,14 @@ const PrivacyPolicy = () => {
 
   return (
     <>
-      <Helmet><title>{content.title}</title></Helmet>
+      <Helmet>
+        <title>{content.title}</title>
+        <meta name="description" content={content.description} />
+        <link rel="canonical" href={getCanonicalUrl(language, '/privacy')} />
+        <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/privacy')} />
+        <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/privacy')} />
+        <link rel="alternate" hrefLang="x-default" href={`${getDefaultUrl()}privacy`} />
+      </Helmet>
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
         <main className="flex-1 max-w-5xl mx-auto px-6 py-16 w-full">
