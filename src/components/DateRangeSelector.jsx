@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   addMonths,
   differenceInCalendarDays,
@@ -67,6 +67,8 @@ const DateRangeSelector = ({
   const [monthCount, setMonthCount] = useState(1);
   const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()));
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const nativeStartInputRef = useRef(null);
+  const nativeEndInputRef = useRef(null);
 
   const locale = language === 'es' ? es : enUS;
   const today = useMemo(() => startOfDay(new Date()), []);
@@ -258,6 +260,19 @@ const DateRangeSelector = ({
     }
   };
 
+  const openNativeDatePicker = (inputRef) => {
+    const input = inputRef.current;
+    if (!input) return;
+
+    if (typeof input.showPicker === 'function') {
+      input.showPicker();
+      return;
+    }
+
+    input.focus();
+    input.click();
+  };
+
   const handleConfirm = () => {
     if (!canSubmit) return;
     const payload = {
@@ -343,9 +358,27 @@ const DateRangeSelector = ({
                         placeholder="YYYY/MM/DD"
                         inputMode="numeric"
                         autoComplete="off"
-                        className="h-12 border-input bg-background pl-10 text-base focus-visible:ring-ring/30"
+                        className="h-12 border-input bg-background pr-12 text-base focus-visible:ring-ring/30"
                       />
-                      <CalendarBlank className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                      <input
+                        ref={nativeStartInputRef}
+                        type="date"
+                        value={draftStart ? toNativeInputValue(draftStart) : ''}
+                        min={toNativeInputValue(exerciseStart)}
+                        max={toNativeInputValue(exerciseEnd)}
+                        onChange={(e) => handleStartInputChange(e.target.value)}
+                        className="pointer-events-none absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 opacity-0"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => openNativeDatePicker(nativeStartInputRef)}
+                        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                        aria-label={`${t('dateSelector.pickDate')}: ${t('dateSelector.startDate')}`}
+                      >
+                        <CalendarBlank size={18} weight="bold" />
+                      </button>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -360,9 +393,27 @@ const DateRangeSelector = ({
                         placeholder="YYYY/MM/DD"
                         inputMode="numeric"
                         autoComplete="off"
-                        className="h-12 border-input bg-background pl-10 text-base focus-visible:ring-ring/30"
+                        className="h-12 border-input bg-background pr-12 text-base focus-visible:ring-ring/30"
                       />
-                      <CalendarCheck className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                      <input
+                        ref={nativeEndInputRef}
+                        type="date"
+                        value={draftEnd ? toNativeInputValue(draftEnd) : ''}
+                        min={toNativeInputValue(exerciseStart)}
+                        max={toNativeInputValue(exerciseEnd)}
+                        onChange={(e) => handleEndInputChange(e.target.value)}
+                        className="pointer-events-none absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 opacity-0"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => openNativeDatePicker(nativeEndInputRef)}
+                        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                        aria-label={`${t('dateSelector.pickDate')}: ${t('dateSelector.endDate')}`}
+                      >
+                        <CalendarCheck size={18} weight="bold" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -538,6 +589,10 @@ function toDayKey(date) {
 
 function toInputValue(date) {
   return date ? format(date, 'yyyy/MM/dd') : '';
+}
+
+function toNativeInputValue(date) {
+  return date ? format(date, 'yyyy-MM-dd') : '';
 }
 
 function parseInputDate(value) {
