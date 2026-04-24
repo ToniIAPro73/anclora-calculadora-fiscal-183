@@ -35,3 +35,4 @@ desktop.ini
 # Temporales de compilación de Vite
 *.timestamp-*
 .vercel
+.codex
