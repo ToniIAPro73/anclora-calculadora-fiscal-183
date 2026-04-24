@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/hooks/useLanguage.js';
 
@@ -36,17 +35,18 @@ const ProgressBar = ({ totalDays }) => {
       </div>
       
       <div className="relative h-8 overflow-hidden rounded-md border border-border bg-muted">
-        <motion.div
+        <div
           className={cn(
-            "h-full rounded-md transition-colors duration-300",
+            "h-full rounded-md",
             status.color === 'success' && "bg-[hsl(var(--success))]",
             status.color === 'warning' && "bg-[hsl(var(--warning))]",
             status.color === 'destructive' && "bg-[hsl(var(--destructive))]",
             isPulsing && "animate-pulse-subtle"
           )}
-          initial={{ width: 0 }}
-          animate={{ width: `${percentage}%` }}
-          transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+          style={{
+            width: `${percentage}%`,
+            transition: 'width 800ms cubic-bezier(0.32,0.72,0,1), background-color 300ms ease',
+          }}
           role="progressbar"
           aria-valuenow={Number(percentage.toFixed(1))}
           aria-valuemin="0"

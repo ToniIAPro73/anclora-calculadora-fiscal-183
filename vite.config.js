@@ -319,13 +319,11 @@ export default defineConfig({
 			output: {
 				manualChunks(id) {
 					if (!id.includes('node_modules')) return;
-					if (id.includes('framer-motion')) return 'framer-motion';
 					if (id.includes('recharts') || id.includes('d3-')) return 'charts';
 					if (id.includes('@radix-ui')) return 'radix-ui';
 					if (id.includes('react-dom') || id.includes('react-router') || id.includes('react-hook-form')) return 'react-vendor';
 					if (id.includes('lucide-react') || id.includes('@phosphor-icons')) return 'icons';
 					if (id.includes('date-fns') || id.includes('react-day-picker')) return 'date-utils';
-					if (id.includes('jspdf') || id.includes('html2canvas') || id.includes('dompurify')) return 'pdf-libs';
 				}
 			}
 		}
