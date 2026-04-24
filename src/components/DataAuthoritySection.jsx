@@ -7,14 +7,14 @@ const DataAuthoritySection = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="double-shell">
-      <div className="double-shell-core space-y-8 p-6 sm:p-8">
+    <div className="trust-panel">
+      <div className="space-y-6 p-5 sm:p-6">
         <div className="space-y-4">
           <span className="premium-eyebrow">
             <ShieldCheck size={12} weight="fill" className="mr-2" />
-            Source-backed guidance
+            {t('authority.eyebrow')}
           </span>
-          <h3 className="text-3xl font-[620] tracking-[-0.05em] text-foreground">
+          <h3 className="text-2xl font-[700] tracking-tight text-foreground">
             {t('authority.title')}
           </h3>
         </div>
@@ -56,14 +56,14 @@ const DataAuthoritySection = () => {
             </ul>
             </div>
 
-            <div className="rounded-[1.75rem] border border-white/8 bg-white/[0.03] p-5">
+            <div className="rounded-xl border border-border bg-muted/35 p-5">
               <h4 className="mb-3 text-base font-semibold text-foreground">{t('authority.sourcesTitle')}</h4>
               <div className="space-y-3">
                 <a 
                   href="https://sede.agenciatributaria.gob.es/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-background/80 px-4 py-3 text-sm text-foreground transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[1px]"
+                  className="flex items-center justify-between rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground transition-all duration-200 hover:border-primary/30"
                 >
                   <span>{t('authority.source1')}</span>
                   <ArrowSquareOut size={16} weight="bold" className="text-primary" />
@@ -72,7 +72,7 @@ const DataAuthoritySection = () => {
                   href="https://taxation-customs.ec.europa.eu/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-background/80 px-4 py-3 text-sm text-foreground transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[1px]"
+                  className="flex items-center justify-between rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground transition-all duration-200 hover:border-primary/30"
                 >
                   <span>{t('authority.source2')}</span>
                   <ArrowSquareOut size={16} weight="bold" className="text-primary" />
@@ -83,7 +83,7 @@ const DataAuthoritySection = () => {
           </section>
         </div>
 
-          <div className="rounded-[1.75rem] border border-[hsl(var(--warning)/0.18)] bg-[hsl(var(--warning)/0.08)] p-5">
+          <div className="rounded-xl border border-[hsl(var(--warning)/0.18)] bg-[hsl(var(--warning)/0.08)] p-5">
             <div className="flex gap-3">
               <WarningCircle size={20} weight="fill" className="mt-0.5 shrink-0 text-[hsl(var(--warning-foreground))]" />
               <div className="text-xs text-muted-foreground">

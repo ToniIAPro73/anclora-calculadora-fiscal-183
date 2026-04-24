@@ -21,9 +21,8 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px] rounded-[2rem] border-white/10 bg-card/95 p-0">
-        <div className="double-shell rounded-[2rem]">
-          <div className="double-shell-core rounded-[calc(2rem-0.375rem)] px-6 py-6">
+      <DialogContent className="rounded-xl border-border bg-card p-0 sm:max-w-[480px]">
+        <div className="px-6 py-6">
         <DialogHeader>
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
             <Article className="text-primary" size={24} weight="light" />
@@ -43,7 +42,8 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
               placeholder="Ej. Juan Pérez García"
               value={userData.name}
               onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-              className="rounded-xl border-muted bg-muted/30"
+              autoComplete="name"
+              className="h-11 rounded-md border-input bg-background"
             />
           </div>
           <div className="space-y-2">
@@ -59,7 +59,7 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
                     className={cn(
                       "flex items-center justify-center gap-2 rounded-[1.25rem] border px-3 py-3 text-sm font-semibold transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]",
                       isSelected
-                        ? "border-primary/20 bg-primary/10 text-primary shadow-[0_18px_36px_-24px_hsl(var(--primary)/0.8)]"
+                        ? "border-primary/25 bg-primary/10 text-primary"
                         : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground"
                     )}
                   >
@@ -78,7 +78,8 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
               placeholder={t('userDetails.taxIdPlaceholder')}
               value={userData.taxId}
               onChange={(e) => setUserData({ ...userData, taxId: e.target.value })}
-              className="rounded-xl border-muted bg-muted/30"
+              autoComplete="off"
+              className="h-11 rounded-md border-input bg-background"
             />
           </div>
           <p className="text-[11px] text-muted-foreground">
@@ -98,7 +99,6 @@ const UserDetailsModal = ({ isOpen, onClose, onConfirm, userData, setUserData, i
               : `${t('userDetails.confirm')} · 9,99 €`}
           </Button>
         </DialogFooter>
-          </div>
         </div>
       </DialogContent>
     </Dialog>

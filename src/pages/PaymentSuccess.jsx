@@ -4,13 +4,15 @@ import { CheckCircle2, Download, ArrowLeft, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BrandLogo from '@/components/BrandLogo';
 import { generateTaxReport } from '@/lib/generatePdf';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
   const [session, setSession] = useState(null);
   const [downloaded, setDownloaded] = useState(false);
   const [error, setError] = useState(false);
-  const [statusMessage, setStatusMessage] = useState('Verificando pago...');
+  const [statusMessage, setStatusMessage] = useState(() => t('payment.checking'));
 
   useEffect(() => {
     void bootstrapPaymentState();
@@ -53,7 +55,7 @@ const PaymentSuccess = () => {
     if (!raw) {
       if (!silentIfMissing) {
         setError(true);
-        setStatusMessage('No se encontró una sesión de pago válida.');
+        setStatusMessage(t('payment.validSessionMissing'));
       }
       return null;
     }
@@ -76,7 +78,7 @@ const PaymentSuccess = () => {
     } catch {
       if (!silentIfMissing) {
         setError(true);
-        setStatusMessage('No se pudo recuperar la sesión local de pago.');
+        setStatusMessage(t('payment.localSessionError'));
       }
       return null;
     }
@@ -85,7 +87,7 @@ const PaymentSuccess = () => {
   const verifyStripeSession = async (sessionId, deliveryToken) => {
     if (!deliveryToken) {
       setError(true);
-      setStatusMessage('Falta el token de entrega del informe.');
+      setStatusMessage(t('payment.missingDeliveryToken'));
       return;
     }
 
@@ -100,7 +102,7 @@ const PaymentSuccess = () => {
       const verifiedSession = await response.json();
       if (!verifiedSession.verified) {
         setError(true);
-        setStatusMessage('Stripe no ha confirmado el pago de esta sesión.');
+        setStatusMessage(t('payment.stripeNotConfirmed'));
         return;
       }
 
@@ -133,17 +135,17 @@ const PaymentSuccess = () => {
 
       if (!mergedSession.name || !mergedSession.taxId || !Array.isArray(mergedSession.ranges) || mergedSession.ranges.length === 0) {
         setError(true);
-        setStatusMessage('Pago verificado, pero faltan datos suficientes para regenerar el PDF.');
+        setStatusMessage(t('payment.missingReportData'));
         return;
       }
 
       setSession(mergedSession);
-      setStatusMessage('Pago verificado correctamente.');
+      setStatusMessage(t('payment.verifiedMessage'));
       await downloadPdf(mergedSession);
     } catch (verificationError) {
       console.error('Stripe session verification error:', verificationError);
       setError(true);
-      setStatusMessage('No se pudo verificar el pago con Stripe.');
+      setStatusMessage(t('payment.verificationError'));
     }
   };
 
@@ -156,15 +158,15 @@ const PaymentSuccess = () => {
         totalDays: data.totalDays,
         ranges: data.ranges || [],
         fiscalYear: data.fiscalYear || new Date().getFullYear(),
-        language: 'es',
+        language,
       });
       const safeName = (data.name || 'informe').replace(/\s+/g, '_');
       doc.save(`TaxNomad_Informe_${safeName}_${data.fiscalYear || new Date().getFullYear()}.pdf`);
       setDownloaded(true);
-      setStatusMessage('PDF descargado automáticamente.');
+      setStatusMessage(t('payment.autoDownloaded'));
     } catch (err) {
       console.error('PDF generation error:', err);
-      setStatusMessage('El pago está validado, pero hubo un error al generar el PDF.');
+      setStatusMessage(t('payment.generationError'));
     }
   };
 
@@ -174,128 +176,125 @@ const PaymentSuccess = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6 px-4">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-4">
         <BrandLogo className="h-12 w-auto" />
-        <h1 className="text-2xl font-black text-foreground">Sesión expirada</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t('payment.expiredTitle')}</h1>
         <p className="text-muted-foreground text-center max-w-sm">
           {statusMessage}
         </p>
-        <Button onClick={() => navigate('/')} variant="outline">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Volver al calculador
+        <Button onClick={() => navigate('/')} variant="outline" className="rounded-md">
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('payment.backToCalculator')}
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
-      <div className="max-w-md w-full text-center space-y-8">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-10">
+      <div className="w-full max-w-md space-y-6 text-center">
 
-        {/* Delivery header */}
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-              <CheckCircle2 className="w-10 h-10 text-green-600" />
+            <div className="flex h-18 w-18 items-center justify-center rounded-xl border border-[hsl(var(--success)/0.2)] bg-[hsl(var(--success)/0.1)] p-5">
+              <CheckCircle2 className="h-10 w-10 text-[hsl(var(--success))]" />
             </div>
             <div className="absolute -bottom-1 -right-1">
               <BrandLogo className="h-7 w-auto drop-shadow-sm" />
             </div>
           </div>
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 dark:border-green-900/60 dark:bg-green-900/20 dark:text-green-400">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--success)/0.2)] bg-[hsl(var(--success)/0.1)] px-3 py-1 text-xs font-semibold text-[hsl(var(--success))]">
               <CheckCircle2 className="h-3.5 w-3.5" />
-              Pago verificado correctamente
+              {t('payment.verified')}
             </div>
-            <h1 className="mt-4 text-3xl font-black tracking-tight text-foreground">
-              Tu informe ya está listo
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground">
+              {t('payment.readyTitle')}
             </h1>
             <p className="text-muted-foreground mt-2 max-w-sm">
-              Ya puedes descargar tu informe premium de residencia fiscal. Esta pantalla está pensada para la entrega del documento, no para repetir la confirmación del checkout.
+              {t('payment.readyDescription')}
             </p>
           </div>
         </div>
 
-        {/* Session summary */}
         {session && (
-          <div className="rounded-2xl border border-border bg-muted/30 p-6 text-left space-y-3">
+          <div className="space-y-3 rounded-xl border border-border bg-card p-5 text-left">
             <div className="flex items-center gap-2 text-sm font-bold text-foreground">
               <FileText className="w-4 h-4 text-primary" />
-              Informe de Residencia Fiscal {session.fiscalYear || new Date().getFullYear()}
+              {t('payment.reportTitle')} {session.fiscalYear || new Date().getFullYear()}
             </div>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Titular</span>
+                <span className="text-muted-foreground">{t('payment.holder')}</span>
                 <span className="font-semibold">{session.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Identificación</span>
+                <span className="text-muted-foreground">{t('payment.identification')}</span>
                 <span className="font-mono">{session.taxId}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Días en España</span>
-                <span className="font-bold text-primary">{session.totalDays} días</span>
+                <span className="text-muted-foreground">{t('payment.daysInSpain')}</span>
+                <span className="font-bold text-primary">{session.totalDays} {t('dateSelector.days')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Estado</span>
+                <span className="text-muted-foreground">{t('payment.status')}</span>
                 <span className={`font-bold ${
                   session.totalDays > 183 ? 'text-red-500' :
                   session.totalDays > 150 ? 'text-orange-500' : 'text-green-600'
                 }`}>
-                  {session.totalDays > 183 ? 'Límite superado' :
-                   session.totalDays > 150 ? 'Atención' : 'Seguro'}
+                  {session.totalDays > 183 ? t('progress.over') :
+                   session.totalDays > 150 ? t('progress.approaching') : t('progress.safe')}
                 </span>
               </div>
             </div>
           </div>
         )}
 
-        <div className="rounded-2xl border border-border bg-background/70 p-5 text-left space-y-3 shadow-sm">
+        <div className="space-y-3 rounded-xl border border-border bg-muted/35 p-5 text-left">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 rounded-full bg-primary/10 p-2 text-primary">
+            <div className="mt-0.5 rounded-md bg-primary/10 p-2 text-primary">
               <Download className="h-4 w-4" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-bold text-foreground">Siguiente paso</p>
+              <p className="text-sm font-bold text-foreground">{t('payment.nextStep')}</p>
               <p className="text-sm text-muted-foreground">
-                Descarga tu PDF y guárdalo como respaldo fiscal. Si la descarga automática no se ha abierto, puedes lanzarla manualmente desde aquí.
+                {t('payment.nextStepDescription')}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Download status */}
         {downloaded ? (
           <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-sm text-green-700 dark:text-green-400 flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-xl border border-[hsl(var(--success)/0.2)] bg-[hsl(var(--success)/0.1)] p-3 text-sm text-[hsl(var(--success))]">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               {statusMessage}
             </div>
             <Button
               onClick={handleDownloadAgain}
               variant="outline"
-              className="w-full rounded-full h-11 font-semibold gap-2"
+              className="h-11 w-full rounded-md font-semibold gap-2"
             >
-              <Download className="w-4 h-4" /> Descargar informe otra vez
+              <Download className="w-4 h-4" /> {t('payment.downloadAgain')}
             </Button>
           </div>
         ) : (
           <Button
             onClick={handleDownloadAgain}
-            className="w-full rounded-full h-12 font-bold text-base gap-2 shadow-lg"
+            className="h-12 w-full rounded-md text-base font-bold gap-2"
           >
-            <Download className="w-4 h-4" /> Descargar informe PDF
+            <Download className="w-4 h-4" /> {t('payment.downloadPdf')}
           </Button>
         )}
 
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mx-auto transition-colors"
+          className="mx-auto flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ArrowLeft className="w-4 h-4" /> Volver al calculador
+          <ArrowLeft className="w-4 h-4" /> {t('payment.backToCalculator')}
         </button>
 
         <p className="text-xs text-muted-foreground">
-          Guarda este PDF en un lugar seguro. Es tu documento de respaldo fiscal.
+          {t('payment.safeStorage')}
         </p>
       </div>
     </div>

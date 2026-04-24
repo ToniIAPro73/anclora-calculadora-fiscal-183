@@ -12,10 +12,10 @@ const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-2">
-        <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white/40">
+        <h3 className="field-label">
           {t('rangeList.title')}
         </h3>
-        <div className="flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-medium text-muted-foreground">
+        <div className="flex items-center gap-2 rounded-full border border-border bg-muted/45 px-3 py-1 text-[11px] font-medium text-muted-foreground">
           <CalendarBlank size={14} />
           {ranges.length} {ranges.length === 1 ? 'rango' : 'rangos'}
         </div>
@@ -25,33 +25,31 @@ const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
         {ranges.map((range, index) => (
           <div
             key={`${range.start.toISOString()}-${range.end.toISOString()}-${index}`}
-            className="group relative overflow-hidden rounded-[24px] border border-white/5 bg-[#0d1320] transition-all duration-500 hover:border-white/10 hover:bg-[#0f172a]"
+            className="group relative overflow-hidden rounded-xl border border-border bg-card transition-all duration-200 hover:border-primary/25"
           >
-            <div className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-1 flex-col gap-6 sm:flex-row sm:items-center sm:gap-12">
-                {/* Duration Badge */}
-                <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-2xl border border-primary/20 bg-primary/10">
+                <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
                   <span className="text-2xl font-[800] tracking-tight text-primary">{range.days}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary/70">{t('dateSelector.days')}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wide text-primary/75">{t('dateSelector.days')}</span>
                 </div>
 
-                {/* Dates */}
                 <div className="grid grid-cols-2 gap-8 sm:gap-16">
                   <div className="space-y-1.5">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    <p className="field-label">
                       {t('rangeList.from')}
                     </p>
-                    <p className="text-lg font-bold text-white">
+                    <p className="text-lg font-bold text-foreground">
                       {format(range.start, 'dd MMM')}
                       <span className="ml-1 text-xs font-medium text-muted-foreground">{format(range.start, 'yyyy')}</span>
                     </p>
                   </div>
 
                   <div className="space-y-1.5">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    <p className="field-label">
                       {t('rangeList.to')}
                     </p>
-                    <p className="text-lg font-bold text-white">
+                    <p className="text-lg font-bold text-foreground">
                       {format(range.end, 'dd MMM')}
                       <span className="ml-1 text-xs font-medium text-muted-foreground">{format(range.end, 'yyyy')}</span>
                     </p>
@@ -59,14 +57,13 @@ const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-2 border-t border-white/5 pt-4 sm:border-t-0 sm:pt-0">
+              <div className="flex items-center gap-2 border-t border-border pt-4 sm:border-t-0 sm:pt-0">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => onEditRange(index)}
-                  className="h-10 rounded-full bg-white/5 px-4 text-xs font-bold uppercase tracking-widest hover:bg-white/10"
+                  className="h-10 rounded-md bg-muted/50 px-4 text-xs font-bold uppercase tracking-wide"
                 >
                   <PencilSimpleLine className="mr-2" size={16} weight="bold" />
                   {t('rangeList.edit')}
@@ -76,7 +73,8 @@ const RangeList = ({ ranges, onRemoveRange, onEditRange }) => {
                   variant="ghost"
                   size="icon"
                   onClick={() => onRemoveRange(index)}
-                  className="h-10 w-10 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                  className="h-10 w-10 rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                  aria-label={t('rangeList.delete')}
                 >
                   <Trash size={18} weight="bold" />
                 </Button>

@@ -21,19 +21,16 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
   const canDownload = totalDays > 0;
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-5 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1480px]">
-        <div className="double-shell">
-          <div className="double-shell-core flex min-h-[72px] items-center justify-between gap-3 px-4 sm:px-5">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/92 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[68px] max-w-[1280px] items-center justify-between gap-3">
           <div
             className="flex cursor-pointer items-center gap-3 shrink-0"
             onClick={() => navigate('/')}
           >
             <BrandLogo
-              variant={theme === 'dark' ? 'dark' : 'light'}
               className="h-11 sm:h-14 w-auto shrink-0"
             />
-            <span className="text-lg font-[700] tracking-[-0.06em] text-foreground sm:text-2xl">
+            <span className="text-lg font-[700] tracking-tight text-foreground sm:text-xl">
               Tax<span className="text-primary">Nomad</span>
             </span>
           </div>
@@ -58,8 +55,8 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={onOpenExample}
-                className="hidden text-muted-foreground md:inline-flex"
+              onClick={onOpenExample}
+              className="hidden text-muted-foreground md:inline-flex"
               >
                 {t('actions.viewExample')}
                 <ArrowUpRight size={14} weight="bold" />
@@ -71,7 +68,8 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
-                className="h-10 w-10 rounded-full border border-white/8 bg-white/[0.03]"
+                className="h-10 w-10 rounded-md border border-border bg-card"
+                aria-label={language === 'es' ? 'Switch language to English' : 'Cambiar idioma a español'}
               >
                 <GlobeHemisphereWest size={18} weight="light" />
               </Button>
@@ -80,14 +78,13 @@ const Header = ({ totalDays = 0, onOpenModal, onOpenExample }) => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="h-10 w-10 rounded-full border border-white/8 bg-white/[0.03]"
+                className="h-10 w-10 rounded-md border border-border bg-card"
+                aria-label={theme === "dark" ? 'Activar modo claro' : 'Activar modo oscuro'}
               >
                 {theme === "dark" ? <SunHorizon size={18} weight="light" /> : <MoonStars size={18} weight="light" />}
               </Button>
             </div>
           </div>
-        </div>
-        </div>
       </div>
     </header>
   );

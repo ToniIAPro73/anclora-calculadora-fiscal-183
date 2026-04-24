@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { reportOwner } from './reportMetadata.js';
 import { calculateFiscalSummary } from './fiscalSummary.js';
+import logoSource from '@/assets/logo.png';
 
 const C = {
   blue: [71, 100, 158],
@@ -37,7 +38,7 @@ let brandLogoDataUrlPromise;
 
 function loadBrandLogoDataUrl() {
   if (!brandLogoDataUrlPromise) {
-    brandLogoDataUrlPromise = fetch('/logo-calculadora-183-clean-512.png')
+    brandLogoDataUrlPromise = fetch(logoSource)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Unable to load logo asset: ${response.status}`);

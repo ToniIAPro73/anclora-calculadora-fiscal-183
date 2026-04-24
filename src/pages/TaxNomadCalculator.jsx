@@ -6,16 +6,17 @@ import { toast } from 'sonner';
 import {
   ArrowSquareOut,
   CalendarPlus,
+  CheckCircle,
   ClockCountdown,
+  FilePdf,
   ShieldCheck,
-  Sparkle,
+  WarningCircle,
 } from '@phosphor-icons/react';
 import Header from '@/components/Header.jsx';
 import Footer from '@/components/Footer.jsx';
 import DateRangeSelector from '@/components/DateRangeSelector.jsx';
 import RangeList from '@/components/RangeList.jsx';
 import ProgressBar from '@/components/ProgressBar.jsx';
-import SummaryCard from '@/components/SummaryCard.jsx';
 import DataAuthoritySection from '@/components/DataAuthoritySection.jsx';
 import UserDetailsModal from '@/components/UserDetailsModal.jsx';
 import { useLanguage } from '@/hooks/useLanguage.js';
@@ -194,15 +195,7 @@ const TaxNomadCalculator = () => {
         setIsOpen={setIsRangeModalOpen}
       />
 
-      <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-background">
-        <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-          <div className="glass-orb left-[-10rem] top-[-6rem] h-[22rem] w-[22rem] bg-cyan-500/20" />
-          <div className="glass-orb right-[-8rem] top-[8rem] h-[24rem] w-[24rem] bg-blue-500/15" />
-          <div className="glass-orb bottom-[-10rem] left-[24%] h-[20rem] w-[20rem] bg-emerald-400/10" />
-          <div className="page-noise absolute inset-0 opacity-[0.08]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.08),transparent_30%),linear-gradient(180deg,transparent,rgba(2,6,23,0.08))]" />
-        </div>
-
+      <div className="relative flex min-h-[100dvh] flex-col bg-background">
         <Header
           totalDays={totalDays}
           onOpenModal={() => setIsModalOpen(true)}
@@ -210,223 +203,197 @@ const TaxNomadCalculator = () => {
         />
 
         <main className="flex-1">
-          <section className="premium-section pb-12 pt-8 md:pt-14">
-            <div className="grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+          <section className="premium-section pb-6 pt-6 md:pt-10">
+            <div className="grid items-start gap-6">
               <motion.div
-                initial={{ opacity: 0, y: 42, filter: 'blur(16px)' }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }}
-                className="space-y-8"
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="space-y-6"
               >
-                <div className="space-y-5">
-                  <span className="premium-eyebrow">
-                    <Sparkle size={12} weight="fill" className="mr-2" />
-                    Audit-ready residency intelligence
-                  </span>
-                  <div className="max-w-4xl space-y-5">
-                    <h1 className="text-5xl font-[650] tracking-[-0.06em] text-foreground sm:text-6xl xl:text-7xl">
-                      {t('header.title')}
-                    </h1>
-                    <p className="max-w-[62ch] text-base leading-8 text-muted-foreground sm:text-lg">
-                      {t('header.subtitle')}. Controla tus periodos en Espana o la UE, anticipa el umbral fiscal
-                      y genera una salida documental pensada para auditoria, compliance y toma de decisiones.
-                    </p>
+                <div className="trust-panel p-5 sm:p-7">
+                  <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_280px] xl:items-end">
+                    <div className="space-y-4">
+                      <span className="premium-eyebrow">
+                        <ShieldCheck size={12} weight="fill" className="mr-2" />
+                        {t('dashboard.eyebrow')}
+                      </span>
+                      <div className="max-w-3xl space-y-4">
+                        <h1 className="text-4xl font-[700] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
+                          {t('header.title')}
+                        </h1>
+                        <p className="max-w-[68ch] text-base leading-7 text-muted-foreground sm:text-lg">
+                          {t('dashboard.intro')}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-border bg-muted/40 p-4">
+                      <label htmlFor="fiscal-year" className="field-label">
+                        {t('fiscalYear.label')}
+                      </label>
+                      <div className="mt-3 flex items-center gap-3">
+                        <input
+                          id="fiscal-year"
+                          type="number"
+                          inputMode="numeric"
+                          min="1900"
+                          max="2100"
+                          value={fiscalYear}
+                          onChange={handleFiscalYearChange}
+                          className="h-11 w-32 rounded-md border border-input bg-background px-3 text-base font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/35"
+                        />
+                        <p className="text-xs leading-5 text-muted-foreground">
+                          {t('fiscalYear.helper')}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-3">
                   {[
-                    { label: t('stats.totalDays'), value: `${totalDays}`, icon: ClockCountdown },
-                    { label: t('stats.remainingDays'), value: `${remaining}`, icon: ShieldCheck },
-                    { label: t('stats.limitUsage'), value: `${percentage.toFixed(1)}%`, icon: ArrowSquareOut },
-                  ].map(({ label, value, icon: Icon }) => (
-                    <div key={label} className="double-shell reveal-surface">
-                      <div className="double-shell-core p-5">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="space-y-2">
-                            <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">{label}</p>
-                            <p className="text-3xl font-[620] tracking-[-0.05em] text-foreground">{value}</p>
-                          </div>
-                          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
-                            <Icon size={20} weight="light" className="text-primary" />
-                          </div>
+                    { label: t('stats.totalDays'), value: `${totalDays}`, icon: ClockCountdown, helper: t('dashboard.totalHelper') },
+                    { label: t('stats.remainingDays'), value: `${remaining}`, icon: ShieldCheck, helper: t('dashboard.remainingHelper') },
+                    { label: t('stats.limitUsage'), value: `${percentage.toFixed(1)}%`, icon: ArrowSquareOut, helper: statusObj.label },
+                  ].map(({ label, value, icon: Icon, helper }) => (
+                    <div key={label} className="trust-panel reveal-surface p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="space-y-1.5">
+                          <p className="field-label">{label}</p>
+                          <p className="text-3xl font-[700] tracking-tight text-foreground">{value}</p>
+                          <p className="text-xs text-muted-foreground">{helper}</p>
+                        </div>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-primary/15 bg-primary/10">
+                          <Icon size={19} weight="bold" className="text-primary" />
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="double-shell reveal-surface">
-                  <div className="double-shell-core flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">Ejercicio fiscal</p>
-                      <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                        Cambiar el ejercicio limpia los rangos para evitar mezclar periodos fiscales.
-                      </p>
-                    </div>
-                    <input
-                      type="number"
-                      min="1900"
-                      max="2100"
-                      value={fiscalYear}
-                      onChange={handleFiscalYearChange}
-                      className="h-12 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base font-semibold text-foreground outline-none focus:ring-2 focus:ring-primary/30 sm:w-36"
-                    />
-                  </div>
-                </div>
-
-                <div className="double-shell reveal-surface">
-                  <div className="double-shell-core grid gap-6 p-6 lg:grid-cols-[1.2fr_0.8fr]">
-                    <div className="space-y-4">
-                      <span className="premium-eyebrow">Operational workflow</span>
-                      <h2 className="text-2xl font-[620] tracking-[-0.05em] text-foreground sm:text-3xl">
-                        La utilidad pasa de ser una calculadora funcional a sentirse como una herramienta fiscal premium.
-                      </h2>
-                      <p className="max-w-[58ch] text-sm leading-7 text-muted-foreground sm:text-base">
-                        Cada rango, cada dia consumido y cada documento exportado se presenta con jerarquia clara,
-                        superficies mas precisas y una lectura orientada a confianza.
-                      </p>
-                    </div>
-                    <div className="grid gap-4">
-                      {[
-                        'Seguimiento por rangos sincronizado con calendario',
-                        'Lectura inmediata del riesgo frente al limite de 183 dias',
-                        'PDF final listo para documentacion y revision',
-                      ].map((item) => (
-                        <div key={item} className="rounded-[1.5rem] border border-white/8 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-foreground/90">
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 42, filter: 'blur(16px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 0.95, delay: 0.08, ease: [0.32, 0.72, 0, 1] }}
-                className="double-shell lg:sticky lg:top-28"
-              >
-                <div className="double-shell-core space-y-6 p-6 sm:p-7">
-                  <div className="flex items-center justify-between">
-                    <span className="premium-eyebrow">Live overview</span>
+                <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+                  <div className="space-y-4">
                     <button
                       type="button"
-                      onClick={handleOpenExample}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[1px] hover:text-foreground"
+                      onClick={() => {
+                        setEditingRangeIndex(null);
+                        setIsRangeModalOpen(true);
+                      }}
+                      className="group flex w-full items-center justify-between gap-5 rounded-xl border border-dashed border-primary/35 bg-primary/[0.08] p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <ArrowSquareOut size={14} weight="bold" />
-                      {t('actions.viewExample')}
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                          <CalendarPlus size={22} weight="bold" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-semibold text-foreground">
+                            {selectedRanges.length > 0 ? t('dateSelector.addAnotherRange') : t('dateSelector.title')}
+                          </h2>
+                          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                            {t('dateSelector.description')}
+                          </p>
+                        </div>
+                      </div>
+                      <ArrowSquareOut size={18} weight="bold" className="hidden text-primary transition-transform duration-200 group-hover:translate-x-0.5 sm:block" />
                     </button>
-                  </div>
 
-                  <div className="space-y-3">
-                    <p className="text-sm uppercase tracking-[0.24em] text-muted-foreground">Residency pulse</p>
-                    <h2 className="text-4xl font-[650] tracking-[-0.06em] text-foreground">
-                      {totalDays} <span className="text-muted-foreground">/ 183</span>
-                    </h2>
-                    <p className="max-w-[42ch] text-sm leading-7 text-muted-foreground">
-                      Tu situacion actual se recalcula en tiempo real segun los rangos consolidados y el estado del umbral fiscal.
-                    </p>
-                  </div>
+                    <RangeList
+                      ranges={annotatedRanges}
+                      onRemoveRange={handleRemoveRange}
+                      onEditRange={handleEditRange}
+                    />
 
-                  <ProgressBar totalDays={totalDays} />
-
-                  <div className="grid gap-4">
-                    <SummaryCard title={t('stats.totalDays')} value={totalDays} status={statusObj} />
-                    <SummaryCard title={t('stats.remainingDays')} value={remaining} status={statusObj} />
-                    <SummaryCard title={t('stats.limitUsage')} value={`${percentage.toFixed(1)}%`} status={statusObj} />
-                  </div>
-
-                  <div className="rounded-[1.75rem] border border-primary/15 bg-[linear-gradient(180deg,rgba(56,189,248,0.12),rgba(56,189,248,0.03))] p-5">
-                    <div className="flex gap-4">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
-                        <ShieldCheck size={20} weight="light" className="text-primary" />
+                    {selectedRanges.length === 0 && (
+                      <div className="trust-panel p-5">
+                        <div className="flex gap-3">
+                          <WarningCircle size={20} weight="fill" className="mt-0.5 shrink-0 text-[hsl(var(--warning))]" />
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">{t('dashboard.emptyTitle')}</p>
+                            <p className="mt-1 text-sm leading-6 text-muted-foreground">{t('dashboard.emptyDescription')}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/85">
-                          {t('auditReady.title')}
-                        </p>
-                        <p className="text-sm leading-7 text-muted-foreground">
-                          {t('auditReady.description')}
-                        </p>
+                    )}
+
+                    <DataAuthoritySection />
+                  </div>
+
+                  <div className="space-y-4 xl:sticky xl:top-28">
+                    <div className="trust-panel p-5">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="premium-eyebrow">{t('dashboard.statusEyebrow')}</span>
+                          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                            statusObj.color === 'safe'
+                              ? 'border-[hsl(var(--success)/0.22)] bg-[hsl(var(--success)/0.1)] text-[hsl(var(--success))]'
+                              : statusObj.color === 'warning'
+                              ? 'border-[hsl(var(--warning)/0.28)] bg-[hsl(var(--warning)/0.13)] text-[hsl(var(--warning-foreground))]'
+                              : 'border-[hsl(var(--destructive)/0.25)] bg-[hsl(var(--destructive)/0.12)] text-[hsl(var(--destructive))]'
+                          }`}>
+                            {statusObj.color === 'safe' ? <CheckCircle size={14} weight="fill" /> : <WarningCircle size={14} weight="fill" />}
+                            {statusObj.label}
+                          </span>
+                        </div>
+
+                        <div>
+                          <p className="field-label">{t('progress.title')}</p>
+                          <div className="mt-2 flex items-end gap-2">
+                            <span className="text-5xl font-[750] tracking-tight text-foreground">{totalDays}</span>
+                            <span className="pb-1 text-lg font-semibold text-muted-foreground">/ 183</span>
+                          </div>
+                          <p className="mt-2 text-sm leading-6 text-muted-foreground">{t('dashboard.statusDescription')}</p>
+                        </div>
+
+                        <ProgressBar totalDays={totalDays} />
                       </div>
+                    </div>
+
+                    <div className="trust-panel p-5">
+                      <div className="flex items-start gap-3">
+                        <FilePdf size={22} weight="bold" className="mt-0.5 shrink-0 text-primary" />
+                        <div className="space-y-2">
+                          <h3 className="text-lg font-semibold text-foreground">{t('pdfCard.title')}</h3>
+                          <p className="text-sm leading-6 text-muted-foreground">{t('pdfCard.description')}</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 space-y-2 rounded-lg border border-border bg-muted/35 p-3 text-sm">
+                        <div className="flex justify-between gap-3">
+                          <span className="text-muted-foreground">{t('stats.totalDays')}</span>
+                          <span className="font-semibold text-foreground">{totalDays}</span>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <span className="text-muted-foreground">{t('stats.status')}</span>
+                          <span className="font-semibold text-foreground">{statusObj.label}</span>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <span className="text-muted-foreground">{t('pdfCard.price')}</span>
+                          <span className="font-semibold text-foreground">9,99 €</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        disabled={totalDays <= 0}
+                        onClick={() => setIsModalOpen(true)}
+                        className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
+                      >
+                        <FilePdf size={18} weight="bold" />
+                        {t('actions.generatePdf')} · 9,99 €
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleOpenExample}
+                        className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:bg-accent"
+                      >
+                        <ArrowSquareOut size={16} weight="bold" />
+                        {t('actions.viewExample')}
+                      </button>
                     </div>
                   </div>
                 </div>
               </motion.div>
-            </div>
-          </section>
-
-          <section className="premium-section pt-0">
-            <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.08fr)_380px]">
-              <div className="space-y-8">
-                <div className="space-y-6">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditingRangeIndex(null);
-                      setIsRangeModalOpen(true);
-                    }}
-                    className="group relative flex w-full flex-col items-center justify-center overflow-hidden rounded-[32px] border border-white/10 bg-[#0d1320] p-8 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 hover:border-primary/30 hover:bg-[#0f172a] sm:p-12"
-                  >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.08),transparent_70%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-                    
-                    <div className="relative flex flex-col items-center gap-6">
-                      <div className="flex h-20 w-20 items-center justify-center rounded-full border border-primary/20 bg-primary/10 transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-110">
-                        <CalendarPlus size={32} weight="fill" className="text-primary" />
-                      </div>
-                      
-                      <div className="space-y-2 text-center">
-                        <h3 className="text-3xl font-[700] tracking-tight text-white">
-                          {selectedRanges.length > 0 ? t('dateSelector.addAnotherRange') : t('dateSelector.title')}
-                        </h3>
-                        <p className="max-w-[40ch] text-base leading-relaxed text-muted-foreground">
-                          {t('dateSelector.description')}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-3 rounded-full bg-white/5 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors duration-700 group-hover:bg-primary group-hover:text-primary-foreground">
-                        <CalendarPlus size={20} weight="bold" />
-                        {selectedRanges.length > 0 ? t('dateSelector.addAnotherRange') : t('dateSelector.title')}
-                      </div>
-                    </div>
-                  </button>
-
-                  <RangeList
-                    ranges={annotatedRanges}
-                    onRemoveRange={handleRemoveRange}
-                    onEditRange={handleEditRange}
-                  />
-                </div>
-                <DataAuthoritySection />
-              </div>
-
-              <div className="double-shell lg:sticky lg:top-28">
-                <div className="double-shell-core space-y-5 p-6">
-                  <span className="premium-eyebrow">Conversion layer</span>
-                  <div className="space-y-3">
-                    <h3 className="text-2xl font-[620] tracking-[-0.05em] text-foreground">
-                      Exporta el informe cuando tu rango ya este listo.
-                    </h3>
-                    <p className="text-sm leading-7 text-muted-foreground">
-                      El checkout y el PDF final quedan en una misma narrativa de producto: control, trazabilidad y salida documental.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    disabled={totalDays <= 0}
-                    onClick={() => setIsModalOpen(true)}
-                    className="group inline-flex w-full items-center justify-between rounded-full border border-primary/20 bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
-                  >
-                    <span>{t('actions.generatePdf')} · 9,99 €</span>
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black/15 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-[1px]">
-                      <ArrowSquareOut size={18} weight="bold" />
-                    </span>
-                  </button>
-                </div>
-              </div>
             </div>
           </section>
         </main>
