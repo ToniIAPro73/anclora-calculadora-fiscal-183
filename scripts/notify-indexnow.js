@@ -1,3 +1,4 @@
+/* global process */
 // Se ejecuta automáticamente tras cada build
 const key = process.env.INDEXNOW_KEY;
 if (!key) process.exit(0);
