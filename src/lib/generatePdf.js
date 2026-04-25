@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
 import { reportOwner } from './reportMetadata.js';
 import { calculateFiscalSummary } from './fiscalSummary.js';
-import logoSource from '@/assets/logo-header.webp';
+import logoSource from '@/assets/logo.png';
 
 const C = {
   blue: [71, 100, 158],
@@ -225,7 +225,8 @@ export async function generateTaxReport({
   const overlapDeduction = Math.max(rawDays - verifiedTotalDays, 0);
   const overlapSummaryDays = exampleMode ? 5 : overlapDeduction;
   const identifierLabel = documentType === 'nie' ? copy.nieLabel.replace(':', '') : copy.passportLabel.replace(':', '');
-  const fileOwnerLine = `${reportOwner.name} · ${reportOwner.email}`;
+  const contactLabel = language === 'en' ? 'Contact' : 'Contacto';
+  const fileOwnerLine = `${contactLabel}: ${reportOwner.email}`;
   const headerHeight = exampleMode ? 30 : 34;
   const footerReserveY = H - 42;
   const tableFooterReserveY = H - 28;
