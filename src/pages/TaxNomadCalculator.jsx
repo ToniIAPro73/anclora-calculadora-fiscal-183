@@ -256,7 +256,7 @@ const TaxNomadCalculator = () => {
         setIsOpen={setIsRangeModalOpen}
       />
 
-      <div className="relative flex min-h-[100dvh] flex-col bg-background">
+      <div className="relative flex min-h-[100dvh] flex-col bg-background pb-[calc(5.75rem+env(safe-area-inset-bottom))] lg:pb-0">
         <Header
           totalDays={totalDays}
           onOpenModal={() => setIsModalOpen(true)}
@@ -455,6 +455,28 @@ const TaxNomadCalculator = () => {
         </main>
 
         <Footer />
+
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/70 bg-background/88 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_45px_-30px_rgba(15,23,42,0.75)] backdrop-blur-xl lg:hidden">
+          <div className="mx-auto grid max-w-md grid-cols-[0.82fr_1.18fr] gap-2 rounded-xl border border-border/80 bg-card/90 p-2">
+            <button
+              type="button"
+              onClick={handleOpenExample}
+              className="inline-flex h-12 min-w-0 items-center justify-center gap-2 rounded-lg border border-input bg-background px-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+            >
+              <ArrowSquareOut size={17} weight="bold" className="shrink-0 text-primary" />
+              <span className="truncate">{t('actions.viewExample')}</span>
+            </button>
+            <button
+              type="button"
+              disabled={totalDays <= 0}
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex h-12 min-w-0 items-center justify-center gap-2 rounded-lg bg-primary px-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
+            >
+              <FilePdf size={18} weight="bold" className="shrink-0" />
+              <span className="truncate">{t('actions.generatePdf')} · 9,99 €</span>
+            </button>
+          </div>
+        </div>
 
         <Suspense fallback={null}>
           <UserDetailsModal
