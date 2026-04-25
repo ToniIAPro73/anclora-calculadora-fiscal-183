@@ -12,5 +12,7 @@ export function recordOperationalError(eventName, error, metadata = {}) {
   recordOperationalEvent(eventName, {
     ...metadata,
     errorType: error instanceof Error ? error.name : typeof error,
+    errorCode: error?.code,
+    errorMessage: error instanceof Error ? error.message : undefined,
   });
 }

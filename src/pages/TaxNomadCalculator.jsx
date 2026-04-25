@@ -17,6 +17,13 @@ import DateRangeSelector from '@/components/DateRangeSelector.jsx';
 import RangeList from '@/components/RangeList.jsx';
 import ProgressBar from '@/components/ProgressBar.jsx';
 import DataAuthoritySection from '@/components/DataAuthoritySection.jsx';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useLanguage } from '@/hooks/useLanguage.js';
 import { mergeDateRanges, calculateUniqueDays } from '@/lib/dateRangeMerger.js';
 import { buildExampleReportPayload } from '@/lib/reportMetadata.js';
@@ -109,17 +116,18 @@ const TaxNomadCalculator = () => {
     setIsRangeModalOpen(true);
   };
 
-  const handleFiscalYearChange = (event) => {
-    const nextYear = Number(event.target.value);
-
-    if (!Number.isInteger(nextYear) || nextYear < 1900 || nextYear > 2100 || nextYear === fiscalYear) {
-      return;
-    }
-
+  const handleFiscalYearChange = (value) => {
+    const nextYear = Number(value);
+    if (nextYear === fiscalYear) return;
     setFiscalYear(nextYear);
     setSelectedRanges([]);
     setEditingRangeIndex(null);
   };
+
+  const fiscalYearOptions = Array.from(
+    { length: new Date().getFullYear() - 2015 + 1 },
+    (_, i) => new Date().getFullYear() - i,
+  );
 
   const handleUpdateRange = (index, nextRange) => {
     setSelectedRanges(prev => prev.map((range, currentIndex) => (
@@ -219,11 +227,17 @@ const TaxNomadCalculator = () => {
       } else {
         navigate(url);              // Internal mock route
       }
-    } catch {
-      // Dev fallback: no Vercel function running locally
+    } catch (error) {
       setIsModalOpen(false);
       setIsProcessing(false);
-      navigate('/payment-mock');
+
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        navigate('/payment-mock');
+        return;
+      }
+
+      console.error('Checkout creation error:', error);
+      toast.error(t('toast.checkoutUnavailable'));
     }
   };
 
@@ -250,7 +264,7 @@ const TaxNomadCalculator = () => {
         setIsOpen={setIsRangeModalOpen}
       />
 
-      <div className="relative flex min-h-[100dvh] flex-col bg-background">
+      <div className="relative flex min-h-[100dvh] flex-col bg-background pb-[calc(5.75rem+env(safe-area-inset-bottom))] lg:pb-0">
         <Header
           totalDays={totalDays}
           onOpenModal={() => setIsModalOpen(true)}
@@ -283,16 +297,24 @@ const TaxNomadCalculator = () => {
                         {t('fiscalYear.label')}
                       </label>
                       <div className="mt-3 flex items-center gap-3">
-                        <input
-                          id="fiscal-year"
-                          type="number"
-                          inputMode="numeric"
-                          min="1900"
-                          max="2100"
-                          value={fiscalYear}
-                          onChange={handleFiscalYearChange}
-                          className="h-11 w-32 rounded-md border border-input bg-background px-3 text-base font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring/35"
-                        />
+                        <Select
+                          value={String(fiscalYear)}
+                          onValueChange={handleFiscalYearChange}
+                        >
+                          <SelectTrigger
+                            id="fiscal-year"
+                            className="h-11 w-36 rounded-md border-input bg-background text-base font-semibold text-foreground focus:ring-ring/35"
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {fiscalYearOptions.map((year) => (
+                              <SelectItem key={year} value={String(year)}>
+                                {year}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <p className="text-xs leading-5 text-muted-foreground">
                           {t('fiscalYear.helper')}
                         </p>
@@ -449,6 +471,28 @@ const TaxNomadCalculator = () => {
         </main>
 
         <Footer />
+
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/70 bg-background/88 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_45px_-30px_rgba(15,23,42,0.75)] backdrop-blur-xl lg:hidden">
+          <div className="mx-auto grid max-w-md grid-cols-[0.82fr_1.18fr] gap-2 rounded-xl border border-border/80 bg-card/90 p-2">
+            <button
+              type="button"
+              onClick={handleOpenExample}
+              className="inline-flex h-12 min-w-0 items-center justify-center gap-2 rounded-lg border border-input bg-background px-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+            >
+              <ArrowSquareOut size={17} weight="bold" className="shrink-0 text-primary" />
+              <span className="truncate">{t('actions.viewExample')}</span>
+            </button>
+            <button
+              type="button"
+              disabled={totalDays <= 0}
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex h-12 min-w-0 items-center justify-center gap-2 rounded-lg bg-primary px-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
+            >
+              <FilePdf size={18} weight="bold" className="shrink-0" />
+              <span className="truncate">{t('actions.generatePdf')} · 9,99 €</span>
+            </button>
+          </div>
+        </div>
 
         <Suspense fallback={null}>
           <UserDetailsModal

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   addMonths,
   differenceInCalendarDays,
@@ -18,6 +18,8 @@ import {
 import { enUS, es } from 'date-fns/locale';
 import {
   CalendarDots,
+  CaretLeft,
+  CaretRight,
   CheckCircle,
   CornersOut,
   X,
@@ -67,6 +69,8 @@ const DateRangeSelector = ({
   const [monthCount, setMonthCount] = useState(1);
   const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()));
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const nativeStartInputRef = useRef(null);
+  const nativeEndInputRef = useRef(null);
 
   const locale = language === 'es' ? es : enUS;
   const today = useMemo(() => startOfDay(new Date()), []);
@@ -75,6 +79,7 @@ const DateRangeSelector = ({
   }, [fiscalYear, today]);
   const exerciseStart = useMemo(() => startOfYear(new Date(fiscalYear, 0, 1)), [fiscalYear]);
   const exerciseEnd = useMemo(() => endOfYear(new Date(fiscalYear, 0, 1)), [fiscalYear]);
+  const maxAllowedDate = useMemo(() => (isBefore(exerciseEnd, today) ? exerciseEnd : today), [exerciseEnd, today]);
   
   const premiumCopy = useMemo(() => (
     language === 'es'
@@ -147,7 +152,7 @@ const DateRangeSelector = ({
     if (!draftStart && !draftEnd && !startInput && !endInput) return null;
     if (!draftStart) return t('dateSelector.validationMissingStart');
     if (!draftEnd) return t('dateSelector.validationMissingEnd');
-    if (isOutsideExercise(draftStart, exerciseStart, exerciseEnd) || isOutsideExercise(draftEnd, exerciseStart, exerciseEnd)) {
+    if (isOutsideExercise(draftStart, exerciseStart, maxAllowedDate) || isOutsideExercise(draftEnd, exerciseStart, maxAllowedDate)) {
       return t('dateSelector.validationOutsideExercise');
     }
     if (isBefore(draftEnd, draftStart)) {
@@ -157,7 +162,7 @@ const DateRangeSelector = ({
       return t('dateSelector.validationOverlap');
     }
     return null;
-  }, [draftEnd, draftStart, endInput, exerciseEnd, exerciseStart, occupiedDayKeys, startInput, t]);
+  }, [draftEnd, draftStart, endInput, maxAllowedDate, exerciseStart, occupiedDayKeys, startInput, t]);
 
   const rangePreview = useMemo(() => {
     if (!draftStart) return undefined;
@@ -180,7 +185,7 @@ const DateRangeSelector = ({
   const canSubmit = !validationMessage && draftStart && draftEnd;
   const selectingEnd = Boolean(draftStart && !draftEnd);
   const previousMonthDisabled = visibleMonth <= startOfMonth(exerciseStart);
-  const nextMonthDisabled = addMonths(visibleMonth, monthCount - 1) >= startOfMonth(exerciseEnd);
+  const nextMonthDisabled = addMonths(visibleMonth, monthCount - 1) >= startOfMonth(maxAllowedDate);
   const visibleMonths = Array.from({ length: monthCount }, (_, index) => addMonths(visibleMonth, index));
 
   const resetDraft = () => {
@@ -233,7 +238,7 @@ const DateRangeSelector = ({
   const handleStartInputChange = (value) => {
     setStartInput(value);
     const parsedDate = parseInputDate(value);
-    if (parsedDate && !isOutsideExercise(parsedDate, exerciseStart, exerciseEnd)) {
+    if (parsedDate && !isOutsideExercise(parsedDate, exerciseStart, maxAllowedDate)) {
       const d = startOfDay(parsedDate);
       setDraftStart(d);
       setVisibleMonth(startOfMonth(d));
@@ -249,13 +254,26 @@ const DateRangeSelector = ({
   const handleEndInputChange = (value) => {
     setEndInput(value);
     const parsedDate = parseInputDate(value);
-    if (parsedDate && !isOutsideExercise(parsedDate, exerciseStart, exerciseEnd)) {
+    if (parsedDate && !isOutsideExercise(parsedDate, exerciseStart, maxAllowedDate)) {
       const d = startOfDay(parsedDate);
       setDraftEnd(d);
       setVisibleMonth(startOfMonth(d));
     } else {
       setDraftEnd(null);
     }
+  };
+
+  const openNativeDatePicker = (inputRef) => {
+    const input = inputRef.current;
+    if (!input) return;
+
+    if (typeof input.showPicker === 'function') {
+      input.showPicker();
+      return;
+    }
+
+    input.focus();
+    input.click();
   };
 
   const handleConfirm = () => {
@@ -275,7 +293,7 @@ const DateRangeSelector = ({
 
   const isDayDisabled = (date) => {
     const d = startOfDay(date);
-    if (isOutsideExercise(d, exerciseStart, exerciseEnd)) return true;
+    if (isOutsideExercise(d, exerciseStart, maxAllowedDate)) return true;
     if (occupiedDayKeys.has(toDayKey(d))) return true;
     return false;
   };
@@ -343,9 +361,27 @@ const DateRangeSelector = ({
                         placeholder="YYYY/MM/DD"
                         inputMode="numeric"
                         autoComplete="off"
-                        className="h-12 border-input bg-background pl-10 text-base focus-visible:ring-ring/30"
+                        className="h-12 border-input bg-background pr-12 text-base focus-visible:ring-ring/30"
                       />
-                      <CalendarBlank className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                      <input
+                        ref={nativeStartInputRef}
+                        type="date"
+                        value={draftStart ? toNativeInputValue(draftStart) : ''}
+                        min={toNativeInputValue(exerciseStart)}
+                        max={toNativeInputValue(maxAllowedDate)}
+                        onChange={(e) => handleStartInputChange(e.target.value)}
+                        className="pointer-events-none absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 opacity-0"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => openNativeDatePicker(nativeStartInputRef)}
+                        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                        aria-label={`${t('dateSelector.pickDate')}: ${t('dateSelector.startDate')}`}
+                      >
+                        <CalendarBlank size={18} weight="bold" />
+                      </button>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -360,9 +396,27 @@ const DateRangeSelector = ({
                         placeholder="YYYY/MM/DD"
                         inputMode="numeric"
                         autoComplete="off"
-                        className="h-12 border-input bg-background pl-10 text-base focus-visible:ring-ring/30"
+                        className="h-12 border-input bg-background pr-12 text-base focus-visible:ring-ring/30"
                       />
-                      <CalendarCheck className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                      <input
+                        ref={nativeEndInputRef}
+                        type="date"
+                        value={draftEnd ? toNativeInputValue(draftEnd) : ''}
+                        min={toNativeInputValue(exerciseStart)}
+                        max={toNativeInputValue(maxAllowedDate)}
+                        onChange={(e) => handleEndInputChange(e.target.value)}
+                        className="pointer-events-none absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 opacity-0"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => openNativeDatePicker(nativeEndInputRef)}
+                        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                        aria-label={`${t('dateSelector.pickDate')}: ${t('dateSelector.endDate')}`}
+                      >
+                        <CalendarCheck size={18} weight="bold" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -389,20 +443,42 @@ const DateRangeSelector = ({
             </div>
 
             <div className="flex flex-1 flex-col overflow-hidden bg-background">
-              <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-6">
-                <div className="flex gap-4">
-                  {visibleMonths.map((m, i) => (
-                    <span key={i} className="text-sm font-bold text-foreground sm:text-base">
-                      {format(m, 'MMMM yyyy', { locale })}
-                      {i === 0 && monthCount > 1 && <span className="mx-2 opacity-20">/</span>}
-                    </span>
-                  ))}
+              <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-6 sm:py-4">
+                <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setVisibleMonth((m) => subMonths(m, 1))}
+                    disabled={previousMonthDisabled}
+                    aria-label={premiumCopy.previousMonth}
+                    className="h-9 w-9 shrink-0 rounded-md"
+                  >
+                    <CaretLeft size={16} weight="bold" />
+                  </Button>
+                  <div className="flex min-w-0 flex-1 items-center justify-center gap-3">
+                    {visibleMonths.map((m, i) => (
+                      <span key={i} className="truncate text-sm font-bold text-foreground sm:text-base">
+                        {format(m, 'MMMM yyyy', { locale })}
+                        {i === 0 && monthCount > 1 && <span className="mx-2 opacity-20">/</span>}
+                      </span>
+                    ))}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setVisibleMonth((m) => addMonths(m, 1))}
+                    disabled={nextMonthDisabled}
+                    aria-label={premiumCopy.nextMonth}
+                    className="h-9 w-9 shrink-0 rounded-md"
+                  >
+                    <CaretRight size={16} weight="bold" />
+                  </Button>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setVisibleMonth(initialMonth)}
-                  className="h-9 rounded-md px-4 text-xs font-bold uppercase tracking-wide sm:flex"
+                  className="h-9 shrink-0 rounded-md px-4 text-xs font-bold uppercase tracking-wide"
                 >
                   {premiumCopy.jumpToToday}
                 </Button>
@@ -421,7 +497,7 @@ const DateRangeSelector = ({
                   onDayMouseEnter={(day) => selectingEnd && setHoverDate(startOfDay(day))}
                   disabled={isDayDisabled}
                   startMonth={exerciseStart}
-                  endMonth={exerciseEnd}
+                  endMonth={maxAllowedDate}
                   showOutsideDays={false}
                   className="mx-auto"
                   modifiers={{
@@ -435,6 +511,7 @@ const DateRangeSelector = ({
                     months: "flex flex-col sm:flex-row gap-6 sm:gap-10 justify-center",
                     month: "space-y-6 w-full max-w-[320px]",
                     month_caption: "hidden",
+                    nav: "hidden",
                     table: "w-full border-collapse space-y-1",
                     head_row: "flex mb-2",
                     head_cell: "text-muted-foreground rounded-md w-full font-bold text-[10px] uppercase tracking-wide",
@@ -538,6 +615,10 @@ function toDayKey(date) {
 
 function toInputValue(date) {
   return date ? format(date, 'yyyy/MM/dd') : '';
+}
+
+function toNativeInputValue(date) {
+  return date ? format(date, 'yyyy-MM-dd') : '';
 }
 
 function parseInputDate(value) {
