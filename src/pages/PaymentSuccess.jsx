@@ -218,6 +218,7 @@ const PaymentSuccess = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-[hsl(var(--success)/0.22)] bg-[hsl(var(--success)/0.1)]">
+                <CheckCircle2 className="h-7 w-7 text-[hsl(var(--success))]" />
                 <BrandLogo className="absolute -bottom-1 -right-2 h-5 w-auto drop-shadow-sm" />
               </div>
               <div>
