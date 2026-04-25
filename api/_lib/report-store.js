@@ -39,16 +39,12 @@ async function ensureSchema() {
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
     `);
-    schemaReadyPromise = schemaReadyPromise.then(() => sql.query(`
-      ALTER TABLE premium_reports
-      ADD COLUMN IF NOT EXISTS language TEXT NOT NULL DEFAULT 'es';
-      ALTER TABLE premium_reports
-      ADD COLUMN IF NOT EXISTS fiscal_year INTEGER NOT NULL DEFAULT 2026;
-      ALTER TABLE premium_reports
-      ADD COLUMN IF NOT EXISTS delivery_token_hash TEXT;
-      ALTER TABLE premium_reports
-      ADD COLUMN IF NOT EXISTS delivery_token_expires_at TIMESTAMPTZ;
-    `));
+    schemaReadyPromise = schemaReadyPromise.then(async () => {
+      await sql.query("ALTER TABLE premium_reports ADD COLUMN IF NOT EXISTS language TEXT NOT NULL DEFAULT 'es'");
+      await sql.query('ALTER TABLE premium_reports ADD COLUMN IF NOT EXISTS fiscal_year INTEGER NOT NULL DEFAULT 2026');
+      await sql.query('ALTER TABLE premium_reports ADD COLUMN IF NOT EXISTS delivery_token_hash TEXT');
+      await sql.query('ALTER TABLE premium_reports ADD COLUMN IF NOT EXISTS delivery_token_expires_at TIMESTAMPTZ');
+    });
   }
 
   await schemaReadyPromise;
