@@ -225,7 +225,7 @@ export async function generateTaxReport({
   const overlapDeduction = Math.max(rawDays - verifiedTotalDays, 0);
   const overlapSummaryDays = exampleMode ? 5 : overlapDeduction;
   const identifierLabel = documentType === 'nie' ? copy.nieLabel.replace(':', '') : copy.passportLabel.replace(':', '');
-  const fileOwnerLine = `${reportOwner.name} · ${reportOwner.nif} · ${reportOwner.email}`;
+  const fileOwnerLine = `${reportOwner.name} · ${reportOwner.email}`;
   const headerHeight = exampleMode ? 30 : 34;
   const footerReserveY = H - 42;
   const tableFooterReserveY = H - 28;
