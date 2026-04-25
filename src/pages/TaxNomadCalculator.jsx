@@ -219,11 +219,17 @@ const TaxNomadCalculator = () => {
       } else {
         navigate(url);              // Internal mock route
       }
-    } catch {
-      // Dev fallback: no Vercel function running locally
+    } catch (error) {
       setIsModalOpen(false);
       setIsProcessing(false);
-      navigate('/payment-mock');
+
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        navigate('/payment-mock');
+        return;
+      }
+
+      console.error('Checkout creation error:', error);
+      toast.error(t('toast.checkoutUnavailable'));
     }
   };
 

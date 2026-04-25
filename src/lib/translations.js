@@ -93,6 +93,7 @@ export const translations = {
       overlap: "Note: Overlapping days detected and excluded for accuracy",
       rangeAdded: "Date range added",
       rangeRemoved: "Date range removed",
+      checkoutUnavailable: "Checkout is temporarily unavailable. Please try again in a few minutes.",
       stripeMock: "Stripe Integration Detected. Awaiting API keys to process real payment."
     },
     userDetails: {
@@ -293,6 +294,7 @@ export const translations = {
       overlap: "Nota: Días superpuestos detectados y excluidos para mayor precisión",
       rangeAdded: "Rango de fechas añadido",
       rangeRemoved: "Rango de fechas eliminado",
+      checkoutUnavailable: "El pago no está disponible temporalmente. Inténtalo de nuevo en unos minutos.",
       stripeMock: "Integración de Stripe detectada. Esperando claves API para procesar el pago real."
     },
     userDetails: {
