@@ -9,7 +9,8 @@
 		"start": "vite preview --host :: --port 3000",
 		"lint": "eslint . --quiet",
 		"lint:warn": "eslint .",
-		"test": "vitest run"
+		"test": "vitest run",
+		"postbuild": "node scripts/notify-indexnow.js"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.2",
