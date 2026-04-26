@@ -153,7 +153,8 @@ export const translations = {
       copyright: "© 2026 183-Day Tax Nomad Calculator. All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms of Service",
-      legalNotice: "Legal Notice"
+      legalNotice: "Legal Notice",
+      cookies: "Cookie Policy"
     },
     auditReady: {
       title: "Audit-Ready",
@@ -355,7 +356,8 @@ export const translations = {
       copyright: "© 2026 Calculadora Nómada Fiscal 183 Días. Todos los derechos reservados.",
       privacy: "Política de Privacidad",
       terms: "Términos de Servicio",
-      legalNotice: "Aviso Legal"
+      legalNotice: "Aviso Legal",
+      cookies: "Política de Cookies"
     },
     auditReady: {
       title: "Audit-Ready",

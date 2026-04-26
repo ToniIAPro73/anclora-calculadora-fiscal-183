@@ -79,6 +79,12 @@ const contentByLanguage = {
             body: 'Tratamos los datos exclusivamente para prestar el servicio, generar el informe contratado y gestionar el pago asociado.',
             note: 'No vendemos datos ni los compartimos con terceros para fines propios de marketing.',
           },
+          {
+            title: '2.5 Analítica opcional',
+            body: 'Si aceptas cookies analíticas, Google Analytics 4 puede recopilar datos agregados de uso y navegación para ayudarnos a mejorar el servicio.',
+            note: 'Base jurídica: Art. 6.1.a RGPD — consentimiento del interesado.',
+            link: { href: 'https://policies.google.com/technologies/partner-sites', label: 'policies.google.com/technologies/partner-sites' },
+          },
         ],
       },
       {
@@ -116,7 +122,8 @@ const contentByLanguage = {
         body: ['Actualmente utilizamos únicamente mecanismos locales necesarios para la experiencia básica del servicio:'],
         plainList: [
           'localStorage para guardar la preferencia de idioma y tema visual.',
-          'No utilizamos analítica ni cookies publicitarias activas en la versión actual del servicio.',
+          'localStorage para registrar tu preferencia de consentimiento de cookies opcionales.',
+          'Google Analytics 4 solo se activa si aceptas cookies analíticas.',
         ],
       },
     ],
@@ -195,6 +202,12 @@ const contentByLanguage = {
             body: 'We process data solely to deliver the service, generate the purchased report, and manage the related payment flow.',
             note: 'We do not sell data or share it with third parties for our own marketing purposes.',
           },
+          {
+            title: '2.5 Optional analytics',
+            body: 'If you accept analytics cookies, Google Analytics 4 may collect aggregated usage and navigation data to help us improve the service.',
+            note: 'Legal basis: Article 6(1)(a) GDPR — consent.',
+            link: { href: 'https://policies.google.com/technologies/partner-sites', label: 'policies.google.com/technologies/partner-sites' },
+          },
         ],
       },
       {
@@ -232,7 +245,8 @@ const contentByLanguage = {
         body: ['At present, we only rely on local mechanisms necessary for the basic service experience:'],
         plainList: [
           'localStorage to remember language and theme preferences.',
-          'We do not currently use active analytics or advertising cookies in the live service.',
+          'localStorage to record your optional cookie consent preference.',
+          'Google Analytics 4 is only enabled if you accept analytics cookies.',
         ],
       },
     ],

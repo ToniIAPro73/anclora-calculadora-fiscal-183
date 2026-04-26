@@ -2,15 +2,18 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import ScrollToTop from './components/ScrollToTop';
+import AnalyticsManager from './components/AnalyticsManager';
 import TaxNomadCalculator from './pages/TaxNomadCalculator';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { I18nProvider } from './contexts/i18nContext';
 import { SeoAppSchema } from '@/components/SeoAppSchema';
+import CookieBanner from '@/components/CookieBanner';
 import { getLanguageFromPath } from '@/lib/seo.js';
 
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const LegalNotice = lazy(() => import('./pages/LegalNotice'));
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
 const PaymentMock = lazy(() => import('./pages/PaymentMock'));
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 
@@ -21,6 +24,7 @@ function AppShell() {
   return (
     <I18nProvider initialLanguage={initialLanguage}>
       <SeoAppSchema />
+      <AnalyticsManager />
       <ScrollToTop />
       <Suspense fallback={null}>
         <Routes>
@@ -39,11 +43,15 @@ function AppShell() {
           <Route path="/legal-notice" element={<LegalNotice />} />
           <Route path="/es/legal-notice" element={<LegalNotice />} />
           <Route path="/en/legal-notice" element={<LegalNotice />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="/es/cookies" element={<CookiePolicy />} />
+          <Route path="/en/cookies" element={<CookiePolicy />} />
           <Route path="/payment-mock" element={<PaymentMock />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="*" element={<TaxNomadCalculator />} />
         </Routes>
       </Suspense>
+      <CookieBanner />
       <Toaster position="top-center" richColors />
     </I18nProvider>
   );

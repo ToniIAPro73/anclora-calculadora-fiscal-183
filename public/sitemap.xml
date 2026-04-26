@@ -65,4 +65,20 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://www.regla183.com/es/cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/cookies/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/cookies/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/es/cookies/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.regla183.com/en/cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/cookies/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/cookies/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/es/cookies/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
