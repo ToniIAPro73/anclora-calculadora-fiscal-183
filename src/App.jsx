@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import ScrollToTop from './components/ScrollToTop';
-import AnalyticsManager from './components/AnalyticsManager';
+import TagManagerManager from './components/TagManagerManager';
 import TaxNomadCalculator from './pages/TaxNomadCalculator';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { I18nProvider } from './contexts/i18nContext';
@@ -24,7 +24,7 @@ function AppShell() {
   return (
     <I18nProvider initialLanguage={initialLanguage}>
       <SeoAppSchema />
-      <AnalyticsManager />
+      <TagManagerManager />
       <ScrollToTop />
       <Suspense fallback={null}>
         <Routes>

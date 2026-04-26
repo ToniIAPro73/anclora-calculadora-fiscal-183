@@ -13,16 +13,16 @@ import {
 const contentByLanguage = {
   es: {
     eyebrow: 'Cookies y privacidad',
-    title: 'Usamos tecnologías necesarias y solo activamos Google Analytics 4 si das tu consentimiento.',
-    body: 'Puedes aceptar o rechazar cookies no esenciales. La medición analítica permanece bloqueada hasta que aceptes.',
+    title: 'Usamos tecnologías necesarias y solo activamos la medición analítica si das tu consentimiento.',
+    body: 'Puedes aceptar o rechazar cookies no esenciales. Google Tag Manager y Google Analytics 4 respetan esa elección.',
     accept: 'Aceptar',
     reject: 'Rechazar',
     policy: 'Política de Cookies',
   },
   en: {
     eyebrow: 'Cookies and privacy',
-    title: 'We use necessary technologies and only enable Google Analytics 4 if you give consent.',
-    body: 'You can accept or reject non-essential cookies. Analytics measurement stays blocked until you accept.',
+    title: 'We use necessary technologies and only enable analytics measurement if you give consent.',
+    body: 'You can accept or reject non-essential cookies. Google Tag Manager and Google Analytics 4 respect that choice.',
     accept: 'Accept',
     reject: 'Reject',
     policy: 'Cookie Policy',
