@@ -1,5 +1,20 @@
 {
+  "redirects": [
+    {
+      "source": "http://regla183.com/:path*",
+      "destination": "https://www.regla183.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "https://regla183.com/:path*",
+      "destination": "https://www.regla183.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/((?!api/|robots\\.txt|sitemap\\.xml).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!api/|robots\\.txt|sitemap\\.xml|favicon\\.ico|favicon-16x16\\.png|favicon-32x32\\.png|apple-touch-icon\\.png|site\\.webmanifest|browserconfig\\.xml).*)",
+      "destination": "/index.html"
+    }
   ]
 }
