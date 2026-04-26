@@ -9,109 +9,107 @@ import { getCanonicalUrl, getDefaultUrl } from '@/lib/seo.js';
 const contentByLanguage = {
   es: {
     title: 'Términos de Servicio · TaxNomad',
-    description: 'Términos legales de uso de la Calculadora Nómada Fiscal 183 Días para residencia fiscal en España y la UE.',
-    updatedAt: 'Última actualización: 20 de abril de 2026',
+    description: 'Condiciones de uso del servicio TaxNomad para el informe premium y la calculadora de la regla de 183 días en España.',
+    updatedAt: 'Última actualización: 26 de abril de 2026',
     heading: 'Términos de Servicio',
-    intro: 'Condiciones legales de uso del servicio TaxNomad. Léelas antes de realizar cualquier compra.',
-    providerTitle: '1. Identificación del prestador del servicio',
-    providerIntro: 'En cumplimiento del artículo 10 de la Ley 34/2002, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se informa:',
+    intro: 'Condiciones legales de uso del servicio TaxNomad. Regulan el acceso a la calculadora y la compra del informe premium.',
+    providerTitle: '1. Descripción del servicio',
+    providerIntro: 'TaxNomad es una herramienta digital diseñada para calcular días de presencia física en España con fines exclusivamente informativos.',
     providerList: [
-      ['Titular', 'Antonio Ballesteros Alonso'],
-      ['NIF', '08997554T'],
-      ['Domicilio', 'Carrer Miquel Rosselló i Alemany, 48 07015 Palma de Mallorca (España)'],
-      ['Email de contacto', 'hola@regla183.com'],
-      ['Sitio web', 'regla183.com'],
+      ['Naturaleza del informe', 'El informe generado no constituye asesoramiento legal, fiscal ni financiero.'],
+      ['Alcance', 'No sustituye la consulta con un profesional cualificado.'],
+      ['Referencia legal', 'La identificación completa del titular está disponible en el Aviso Legal.'],
     ],
-    purposeTitle: '2. Propósito del servicio y limitación de responsabilidad',
+    purposeTitle: '2. Responsabilidad del usuario',
     purposeBody: [
-      'TaxNomad es una herramienta de utilidad técnica diseñada para ayudar a los usuarios a calcular sus días de presencia física en España con fines informativos.',
-      'El informe generado no constituye asesoramiento legal o fiscal oficial ni reemplaza la consulta con un asesor fiscal, abogado o gestor colegiado.',
-      'La exactitud del resultado depende exclusivamente de los datos introducidos por el usuario.',
+      'La precisión de los resultados depende enteramente de los datos introducidos por el usuario.',
+      'El usuario es el único responsable de la exactitud, integridad y actualización de la información proporcionada.',
+      'Cualquier decisión tomada a partir del informe generado corresponde exclusivamente al usuario.',
     ],
-    salesTitle: '3. Política de venta y derecho de desistimiento',
+    salesTitle: '3. Compra y entrega',
     salesBody: [
-      'El Informe Premium tiene un coste de 9,99 € (IVA incluido) y se entrega en formato PDF de forma inmediata tras confirmarse el pago.',
-      'De conformidad con el artículo 16.m) de la Directiva 2011/83/UE y el art. 103.m) del Real Decreto Legislativo 1/2007, el derecho de desistimiento no es aplicable a contenidos digitales suministrados en soporte no material una vez iniciada su ejecución con consentimiento expreso.',
+      'El Informe Premium se ofrece como servicio de pago único.',
+      'Precio: 9,99 € (IVA incluido).',
+      'Entrega: inmediata tras la confirmación correcta del pago.',
     ],
     salesList: [
-      'La ejecución ha comenzado con el consentimiento expreso del consumidor.',
-      'El consumidor reconoce que perderá su derecho de desistimiento cuando el servicio se haya ejecutado completamente.',
+      'Al completar la compra, el usuario consiente expresamente la entrega inmediata del contenido digital.',
+      'La descarga o regeneración del PDF forma parte de la ejecución del servicio contratado.',
     ],
-    salesFooter: 'Si el PDF no pudiera descargarse por un error técnico imputable al servicio, el usuario podrá solicitar la regeneración del informe o el reembolso en hola@regla183.com en un plazo de 48 horas.',
-    liabilityTitle: '4. Limitación de responsabilidad',
-    liabilityLead: 'TaxNomad no será responsable de:',
+    salesFooter: 'Si el PDF no pudiera descargarse por un error técnico imputable al servicio, el usuario podrá solicitar la regeneración del informe o una revisión del caso escribiendo a hola@regla183.com.',
+    liabilityTitle: '4. Derecho de desistimiento',
+    liabilityLead: 'En relación con el contenido digital suministrado de forma inmediata:',
     liabilityList: [
-      'Decisiones fiscales o legales tomadas basándose en el informe generado.',
-      'Errores derivados de datos incorrectos o incompletos introducidos por el usuario.',
-      'Cambios normativos posteriores a la fecha de generación del informe.',
-      'Interrupciones temporales del servicio por mantenimiento o causas de fuerza mayor.',
+      'El derecho de desistimiento no resulta aplicable una vez entregado el contenido digital.',
+      'Esta excepción se aplica siempre que el usuario haya prestado consentimiento previo para el inicio inmediato de la ejecución.',
+      'El usuario reconoce que, con dicha entrega inmediata, pierde su derecho de desistimiento conforme a la normativa aplicable.',
     ],
-    liabilityFooter: 'En cualquier caso, la responsabilidad máxima de TaxNomad quedará limitada al importe abonado por el servicio contratado.',
-    intellectualTitle: '5. Propiedad intelectual',
+    liabilityFooter: 'Esta política se aplica al informe premium como contenido digital suministrado de forma inmediata tras el pago.',
+    intellectualTitle: '5. Limitación de responsabilidad',
     intellectualBody: [
-      'Todos los elementos del sitio web, incluidos diseño, código, textos, logotipos y la marca TaxNomad, son propiedad exclusiva del titular del servicio y están protegidos por la normativa aplicable.',
-      'El informe PDF generado es de uso personal y exclusivo del usuario comprador. No puede ser revendido, redistribuido ni presentado como elaborado por un profesional fiscal colegiado.',
+      'TaxNomad no será responsable de decisiones tomadas por el usuario basándose en el informe generado.',
+      'Tampoco responderá de errores derivados de información incorrecta o incompleta facilitada por el usuario, de cambios normativos posteriores a la generación del informe ni de interrupciones temporales del servicio.',
+      'En cualquier caso, la responsabilidad máxima de TaxNomad quedará limitada al importe efectivamente abonado por el servicio.',
     ],
-    lawTitle: '6. Legislación aplicable y resolución de disputas',
+    lawTitle: '6. Propiedad intelectual',
     lawBody: [
-      'El presente contrato se rige por la legislación española. Para la resolución de controversias, ambas partes se someten a los juzgados y tribunales del domicilio del consumidor, conforme al artículo 90.2 del TRLGDCU.',
-      'Los consumidores de la UE pueden acceder a la plataforma europea de resolución de litigios en línea (ODR) en ec.europa.eu/consumers/odr.',
+      'Todos los contenidos, el diseño, el código y los elementos distintivos de TaxNomad son propiedad exclusiva del titular del servicio o se utilizan con la correspondiente autorización.',
+      'El informe generado se entrega para uso exclusivamente personal y no puede ser revendido, redistribuido ni explotado comercialmente sin autorización expresa.',
     ],
-    changesTitle: '7. Modificaciones de los términos',
-    changesBody: 'TaxNomad se reserva el derecho de modificar estos Términos de Servicio en cualquier momento. Los cambios se publicarán en esta página con la fecha de actualización correspondiente.',
+    changesTitle: '7. Legislación aplicable',
+    changesBody: 'Estos Términos se rigen por la legislación española.',
   },
   en: {
     title: 'Terms of Service · TaxNomad',
-    description: 'Terms of use and legal conditions for the 183-Day Tax Nomad Calculator for Spain and EU tax residency.',
-    updatedAt: 'Last updated: April 20, 2026',
+    description: 'Terms of use for TaxNomad and the premium report related to Spain’s 183-day tax residency rule.',
+    updatedAt: 'Last updated: April 26, 2026',
     heading: 'Terms of Service',
-    intro: 'Legal terms governing the use of the TaxNomad service. Please read them before purchasing.',
-    providerTitle: '1. Service provider identification',
-    providerIntro: 'In accordance with article 10 of Spain’s Law 34/2002 on Information Society Services and Electronic Commerce, the following information is provided:',
+    intro: 'Legal terms governing the use of TaxNomad. They apply to both the calculator and the one-time premium report purchase.',
+    providerTitle: '1. Service description',
+    providerIntro: 'TaxNomad is a digital tool designed to calculate days of physical presence in Spain for informational purposes only.',
     providerList: [
-      ['Owner', 'Antonio Ballesteros Alonso'],
-      ['Tax ID', '08997554T'],
-      ['Registered address', 'Carrer Miquel Rosselló i Alemany, 48 07015 Palma de Mallorca, Spain'],
-      ['Contact email', 'hola@regla183.com'],
-      ['Website', 'regla183.com'],
+      ['Report nature', 'The generated report does not constitute legal, tax, or financial advice.'],
+      ['Scope', 'It does not replace consultation with a qualified professional.'],
+      ['Legal identification', 'Full owner details are available in the Legal Notice.'],
     ],
-    purposeTitle: '2. Service purpose and liability limitation',
+    purposeTitle: '2. User responsibility',
     purposeBody: [
-      'TaxNomad is a technical utility designed to help users calculate days of physical presence in Spain for informational purposes.',
-      'The generated report does not constitute official legal or tax advice and does not replace consultation with a qualified advisor.',
-      'The accuracy of the result depends entirely on the data entered by the user.',
+      'The accuracy of the results depends entirely on the data entered by the user.',
+      'The user is solely responsible for the correctness, completeness, and updating of the submitted information.',
+      'Any decision made on the basis of the generated report remains the sole responsibility of the user.',
     ],
-    salesTitle: '3. Sales policy and withdrawal rights',
+    salesTitle: '3. Purchase and delivery',
     salesBody: [
-      'The Premium Report costs €9.99 (VAT included) and is delivered immediately in PDF format once payment is confirmed.',
-      'Under article 16(m) of Directive 2011/83/EU and article 103(m) of Spain’s Royal Legislative Decree 1/2007, the 14-day withdrawal right does not apply to digital content supplied on a non-tangible medium once performance has begun with the consumer’s express consent.',
+      'The Premium Report is offered as a one-time payment service.',
+      'Price: €9.99 (VAT included).',
+      'Delivery: immediate after successful payment.',
     ],
     salesList: [
-      'Performance has started with the consumer’s express consent.',
-      'The consumer acknowledges losing the right of withdrawal once the service has been fully performed.',
+      'By completing the purchase, the user expressly agrees to the immediate delivery of digital content.',
+      'PDF delivery or regeneration forms part of the contracted service performance.',
     ],
-    salesFooter: 'If the PDF cannot be downloaded due to a technical error attributable to the service, the user may request report regeneration or a refund at hola@regla183.com within 48 hours.',
-    liabilityTitle: '4. Limitation of liability',
-    liabilityLead: 'TaxNomad shall not be liable for:',
+    salesFooter: 'If the PDF cannot be downloaded due to a technical error attributable to the service, the user may request report regeneration or a case review by emailing hola@regla183.com.',
+    liabilityTitle: '4. Withdrawal rights',
+    liabilityLead: 'Regarding digital content supplied immediately after payment:',
     liabilityList: [
-      'Tax or legal decisions made based on the generated report.',
-      'Errors derived from incomplete or incorrect user input.',
-      'Regulatory changes introduced after the report generation date.',
-      'Temporary service interruptions due to maintenance or force majeure.',
+      'The right of withdrawal does not apply once the digital content has been delivered.',
+      'This exception applies provided that the user has given prior consent for immediate performance to begin.',
+      'The user acknowledges the loss of the withdrawal right once immediate digital delivery has started, as permitted by applicable law.',
     ],
-    liabilityFooter: 'In any event, TaxNomad’s maximum liability shall be limited to the amount paid for the contracted service.',
-    intellectualTitle: '5. Intellectual property',
+    liabilityFooter: 'This rule applies to the premium report as digital content supplied immediately after payment.',
+    intellectualTitle: '5. Limitation of liability',
     intellectualBody: [
-      'All website elements, including design, code, texts, logos and the TaxNomad brand, are the exclusive property of the service owner and are protected by applicable intellectual property laws.',
-      'The generated PDF report is for the exclusive personal use of the purchasing user. It may not be resold, redistributed or presented as professional tax advice.',
+      'TaxNomad shall not be liable for decisions made by the user based on the generated report.',
+      'It shall also not be liable for errors resulting from incorrect or incomplete user input, regulatory changes after report generation, or temporary service interruptions.',
+      'In all cases, TaxNomad’s maximum liability shall be limited to the amount paid for the service.',
     ],
-    lawTitle: '6. Governing law and dispute resolution',
+    lawTitle: '6. Intellectual property',
     lawBody: [
-      'This agreement is governed by Spanish law. Any dispute shall be submitted to the courts of the consumer’s domicile in accordance with applicable consumer protection rules.',
-      'EU consumers may access the European Online Dispute Resolution platform at ec.europa.eu/consumers/odr.',
+      'All content, design, code, and distinctive elements of TaxNomad are the exclusive property of the service owner or are used with proper authorisation.',
+      'The generated report is provided for personal use only and may not be resold, redistributed, or commercially exploited without prior written permission.',
     ],
-    changesTitle: '7. Changes to these terms',
-    changesBody: 'TaxNomad reserves the right to modify these Terms of Service at any time. Any change will be published on this page together with the updated revision date.',
+    changesTitle: '7. Governing law',
+    changesBody: 'These Terms are governed by Spanish law.',
   },
 };
 
@@ -214,19 +212,11 @@ const TermsOfService = () => {
               <h2 className="mb-4 flex items-center gap-3 text-2xl font-bold">
                 <Globe className="w-6 h-6 text-primary" /> {content.lawTitle}
               </h2>
-              <p className="mb-3 leading-relaxed text-foreground/80">{content.lawBody[0]}</p>
-              <p className="leading-relaxed text-foreground/80">
-                {content.lawBody[1].split('ec.europa.eu/consumers/odr')[0]}
-                <a
-                  href="https://ec.europa.eu/consumers/odr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-primary"
-                >
-                  ec.europa.eu/consumers/odr
-                </a>
-                {content.lawBody[1].split('ec.europa.eu/consumers/odr')[1]}
-              </p>
+              {content.lawBody.map((paragraph) => (
+                <p key={paragraph} className="mb-3 last:mb-0 leading-relaxed text-foreground/80">
+                  {paragraph}
+                </p>
+              ))}
             </section>
 
             <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">

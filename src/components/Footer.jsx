@@ -44,6 +44,12 @@ const Footer = () => {
             >
               {t('footer.terms')} <ArrowUpRight size={14} weight="bold" />
             </button>
+            <button
+              onClick={() => navigate(`${langPrefix}/legal-notice`)}
+              className="inline-flex items-center gap-2 text-left text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            >
+              {t('footer.legalNotice')} <ArrowUpRight size={14} weight="bold" />
+            </button>
           </div>
 
           <div className="flex flex-col gap-3">

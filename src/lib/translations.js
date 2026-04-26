@@ -139,8 +139,8 @@ export const translations = {
       disclaimerDesc: "This calculator is for informational purposes only and does not constitute legal or tax advice. Tax residency rules are complex and depend on multiple factors beyond just days of physical presence. Always consult with a qualified tax professional or legal advisor for guidance specific to your situation.",
     },
     meta: {
-      title: "183-Day Tax Nomad Calculator - Track Your Residency Days",
-      description: "Calculate your days of presence in Spain and the EU to determine tax residency status. Track multiple date ranges and stay compliant with the 183-day rule.",
+      title: "183 Day Rule Spain Calculator | Tax Residency",
+      description: "Calculate your tax residency in Spain using the 183-day rule.",
     },
     footer: {
       brand: "Tax Nomad Utility",
@@ -152,7 +152,8 @@ export const translations = {
       copyrightShort: "Tax Nomad Calculator",
       copyright: "© 2026 183-Day Tax Nomad Calculator. All rights reserved.",
       privacy: "Privacy Policy",
-      terms: "Terms of Service"
+      terms: "Terms of Service",
+      legalNotice: "Legal Notice"
     },
     auditReady: {
       title: "Audit-Ready",
@@ -340,8 +341,8 @@ export const translations = {
       disclaimerDesc: "Esta calculadora es solo para fines informativos y no constituye asesoramiento legal o fiscal. Las reglas de residencia fiscal son complejas y dependen de múltiples factores más allá de los días de presencia física. Consulta siempre con un profesional fiscal cualificado o asesor legal para obtener orientación específica sobre tu situación.",
     },
     meta: {
-      title: "Calculadora Nómada Fiscal 183 Días - Rastrea tu Residencia",
-      description: "Calcula tus días de presencia en España y la UE para determinar tu estado de residencia fiscal. Rastrea múltiples rangos de fechas y cumple con la regla de los 183 días.",
+      title: "Calculadora Regla 183 España | Residencia Fiscal",
+      description: "Calcula si eres residente fiscal en España según la regla de los 183 días.",
     },
     footer: {
       brand: "Tax Nomad Utility",
@@ -353,7 +354,8 @@ export const translations = {
       copyrightShort: "Calculadora Nómada Fiscal 183 Días",
       copyright: "© 2026 Calculadora Nómada Fiscal 183 Días. Todos los derechos reservados.",
       privacy: "Política de Privacidad",
-      terms: "Términos de Servicio"
+      terms: "Términos de Servicio",
+      legalNotice: "Aviso Legal"
     },
     auditReady: {
       title: "Audit-Ready",

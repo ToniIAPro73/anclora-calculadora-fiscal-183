@@ -10,6 +10,7 @@ import { getLanguageFromPath } from '@/lib/seo.js';
 
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const LegalNotice = lazy(() => import('./pages/LegalNotice'));
 const PaymentMock = lazy(() => import('./pages/PaymentMock'));
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 
@@ -35,6 +36,9 @@ function AppShell() {
           <Route path="/en/privacy" element={<PrivacyPolicy />} />
           <Route path="/es/terms" element={<TermsOfService />} />
           <Route path="/en/terms" element={<TermsOfService />} />
+          <Route path="/legal-notice" element={<LegalNotice />} />
+          <Route path="/es/legal-notice" element={<LegalNotice />} />
+          <Route path="/en/legal-notice" element={<LegalNotice />} />
           <Route path="/payment-mock" element={<PaymentMock />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="*" element={<TaxNomadCalculator />} />
