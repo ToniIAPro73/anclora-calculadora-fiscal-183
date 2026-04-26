@@ -2,50 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://regla183.com/es/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://regla183.com/es/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://regla183.com/en/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://regla183.com/" />
+    <loc>https://www.regla183.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://regla183.com/en/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://regla183.com/es/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://regla183.com/en/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://regla183.com/" />
+    <loc>https://www.regla183.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://regla183.com/es/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://regla183.com/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://regla183.com/en/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://regla183.com/privacy" />
+    <loc>https://www.regla183.com/es/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/privacy" />
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://regla183.com/en/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://regla183.com/es/privacy/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://regla183.com/en/privacy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://regla183.com/privacy" />
+    <loc>https://www.regla183.com/en/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/privacy" />
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://regla183.com/es/terms/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://regla183.com/es/terms/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://regla183.com/en/terms/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://regla183.com/terms" />
+    <loc>https://www.regla183.com/es/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/terms/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/terms" />
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://regla183.com/en/terms/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://regla183.com/es/terms/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://regla183.com/en/terms/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://regla183.com/terms" />
+    <loc>https://www.regla183.com/en/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.regla183.com/es/terms/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.regla183.com/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.regla183.com/terms" />
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
