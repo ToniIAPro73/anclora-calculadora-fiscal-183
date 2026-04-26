@@ -1,12 +1,13 @@
 {
   "redirects": [
     {
-      "source": "http://regla183.com/:path*",
-      "destination": "https://www.regla183.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "https://regla183.com/:path*",
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "regla183.com"
+        }
+      ],
       "destination": "https://www.regla183.com/:path*",
       "permanent": true
     }
