@@ -10,6 +10,26 @@
       ],
       "destination": "https://www.regla183.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/",
+      "destination": "/es/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/es/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/es/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/calculator",
+      "destination": "/es/calculator/",
+      "permanent": true
     }
   ],
   "rewrites": [

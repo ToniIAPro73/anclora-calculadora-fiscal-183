@@ -1,4 +1,4 @@
-export const APP_ORIGIN = 'https://regla183.com';
+export const APP_ORIGIN = 'https://www.regla183.com';
 
 export const LANGUAGES = ['es', 'en'];
 
@@ -8,10 +8,12 @@ export function getLanguageFromPath(pathname = '') {
 }
 
 export function getCanonicalUrl(language = 'es', route = '/') {
+  const safeLanguage = LANGUAGES.includes(language) ? language : 'es';
   const normalizedRoute = route === '/' ? '/' : `/${route.replace(/^\/+|\/+$/g, '')}/`;
-  return `${APP_ORIGIN}/${language}${normalizedRoute === '/' ? '/' : normalizedRoute}`;
+
+  return `${APP_ORIGIN}/${safeLanguage}${normalizedRoute === '/' ? '/' : normalizedRoute}`;
 }
 
 export function getDefaultUrl() {
-  return `${APP_ORIGIN}/`;
+  return `${APP_ORIGIN}/es/`;
 }

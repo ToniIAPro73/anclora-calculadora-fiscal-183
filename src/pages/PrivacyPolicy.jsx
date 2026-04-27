@@ -9,8 +9,8 @@ import { getCanonicalUrl, getDefaultUrl } from '@/lib/seo.js';
 const contentByLanguage = {
   es: {
     title: 'Política de Privacidad · TaxNomad',
-    description: 'Política de privacidad para usuarios que calculan su residencia fiscal en España y la UE con la regla de 183 días.',
-    updatedAt: 'Última actualización: 20 de abril de 2026',
+    description: 'Política de privacidad de TaxNomad para la calculadora de la regla de 183 días y el informe premium.',
+    updatedAt: 'Última actualización: 26 de abril de 2026',
     heading: 'Política de Privacidad',
     intro: 'Transparencia total sobre el tratamiento de tus datos personales.',
     quickSummaryTitle: 'Resumen rápido',
@@ -22,13 +22,13 @@ const contentByLanguage = {
       },
       {
         icon: Eye,
-        title: 'Sin almacenamiento',
-        description: 'Nombre e identificación solo se usan para generar el PDF y no se guardan.',
+        title: 'Datos mínimos',
+        description: 'Solo tratamos la información necesaria para generar y entregar tu informe.',
       },
       {
         icon: Trash2,
-        title: 'Eliminación inmediata',
-        description: 'Los datos se borran de memoria tras la descarga del PDF.',
+        title: 'Retención limitada',
+        description: 'No conservamos de forma permanente los datos del informe por nuestra parte.',
       },
       {
         icon: UserCheck,
@@ -37,7 +37,7 @@ const contentByLanguage = {
       },
       {
         icon: Mail,
-        title: 'Contacto DPO',
+        title: 'Contacto privacidad',
         description: 'hola@regla183.com',
         mailto: true,
       },
@@ -46,25 +46,26 @@ const contentByLanguage = {
       {
         title: '1. Responsable del Tratamiento',
         body: [
-          'En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), el Responsable del Tratamiento es:',
+          'En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), el responsable del tratamiento es TaxNomad.',
+          'El servicio es operado por Antonio Ballesteros Alonso.',
+          'Para cualquier cuestión relacionada con privacidad o protección de datos puedes escribir a hola@regla183.com.',
         ],
         list: [
-          ['Nombre / Razón social', 'Antonio Ballesteros Alonso'],
-          ['Dirección', 'Carrer Miquel Rosselló i Alemany, 48 07015 Palma de Mallorca (España)'],
-          ['NIF', '08997554T'],
-          ['Email', 'hola@regla183.com'],
+          ['Servicio', 'TaxNomad'],
+          ['Contacto', 'hola@regla183.com'],
+          ['Referencia legal', 'La identificación completa del titular figura en el Aviso Legal.'],
         ],
       },
       {
-        title: '2. Datos que recopilamos y finalidad',
+        title: '2. Datos que tratamos',
         blocks: [
           {
-            title: '2.1 Datos de uso de la calculadora',
-            body: 'Los rangos de fechas introducidos se procesan localmente en tu navegador para calcular días de presencia física. No se envían a ningún servidor.',
+            title: '2.1 Rangos de fechas introducidos por el usuario',
+            body: 'Los rangos de fechas se utilizan para calcular los días de presencia física en España. Durante el flujo estándar de la calculadora se procesan localmente en el navegador.',
           },
           {
             title: '2.2 Datos del informe PDF',
-            body: 'Para generar el informe personalizado recopilamos nombre completo y número de identificación (pasaporte o NIE). Estos datos se usan exclusivamente para insertar tu información en el PDF generado.',
+            body: 'Si el usuario decide adquirir el informe premium, tratamos nombre completo, email e identificación (pasaporte o NIE) para generar y entregar el PDF personalizado.',
             note: 'Base jurídica: Art. 6.1.b RGPD — ejecución de contrato.',
           },
           {
@@ -74,24 +75,29 @@ const contentByLanguage = {
             link: { href: 'https://stripe.com/es/privacy', label: 'stripe.com/es/privacy' },
           },
           {
-            title: '2.4 Datos técnicos y cookies de publicidad',
-            body: 'Si activas publicidad mediante Google AdSense, Google puede utilizar cookies para mostrar anuncios personalizados en función de tu historial de navegación.',
+            title: '2.4 Finalidades del tratamiento',
+            body: 'Tratamos los datos exclusivamente para prestar el servicio, generar el informe contratado y gestionar el pago asociado.',
+            note: 'No vendemos datos ni los compartimos con terceros para fines propios de marketing.',
+          },
+          {
+            title: '2.5 Analítica opcional',
+            body: 'Si aceptas cookies analíticas, Google Analytics 4 puede recopilar datos agregados de uso y navegación para ayudarnos a mejorar el servicio.',
             note: 'Base jurídica: Art. 6.1.a RGPD — consentimiento del interesado.',
-            link: { href: 'https://adssettings.google.com', label: 'adssettings.google.com' },
+            link: { href: 'https://policies.google.com/technologies/partner-sites', label: 'policies.google.com/technologies/partner-sites' },
           },
         ],
       },
       {
         title: '3. Plazo de conservación',
         body: [
-          'Los datos personales del informe no se almacenan de forma persistente por nuestra parte. Se procesan durante la generación del PDF y se descartan después.',
+          'Los datos del informe no se almacenan de forma permanente por nuestra parte. Se utilizan para la generación y entrega del PDF y, fuera de ese proceso, no se conservan de forma persistente.',
           'Los datos de transacción pueden ser conservados por Stripe conforme a sus obligaciones legales y políticas de retención.',
         ],
       },
       {
         title: '4. Transferencias internacionales',
         body: [
-          'Los datos de pago son gestionados por Stripe, Inc. (EE.UU.), bajo mecanismos de transferencia internacional adecuados como el Data Privacy Framework y las Cláusulas Contractuales Tipo.',
+          'Los datos de pago son gestionados por Stripe, Inc. y pueden implicar transferencias internacionales bajo las garantías adecuadas aplicables en cada momento.',
           'No realizamos ninguna otra transferencia internacional de datos personales.',
         ],
       },
@@ -112,11 +118,12 @@ const contentByLanguage = {
         ],
       },
       {
-        title: '6. Cookies',
-        body: ['Utilizamos exclusivamente los siguientes mecanismos locales o de terceros:'],
+        title: '6. Tecnologías locales del navegador',
+        body: ['Actualmente utilizamos únicamente mecanismos locales necesarios para la experiencia básica del servicio:'],
         plainList: [
-          'localStorage para guardar tu preferencia de idioma y tema visual. No contiene datos personales sensibles.',
-          'Cookies de Google AdSense, solo si se activa publicidad y siempre sujetas a consentimiento previo cuando resulte exigible.',
+          'localStorage para guardar la preferencia de idioma y tema visual.',
+          'localStorage para registrar tu preferencia de consentimiento de cookies opcionales.',
+          'Google Analytics 4 solo se activa si aceptas cookies analíticas.',
         ],
       },
     ],
@@ -125,8 +132,8 @@ const contentByLanguage = {
   },
   en: {
     title: 'Privacy Policy · TaxNomad',
-    description: 'Privacy policy for users calculating tax residency in Spain and the EU with the 183-day rule.',
-    updatedAt: 'Last updated: April 20, 2026',
+    description: 'Privacy policy for TaxNomad’s 183-day rule calculator and premium report service.',
+    updatedAt: 'Last updated: April 26, 2026',
     heading: 'Privacy Policy',
     intro: 'Full transparency about how your personal data is processed.',
     quickSummaryTitle: 'Quick summary',
@@ -138,13 +145,13 @@ const contentByLanguage = {
       },
       {
         icon: Eye,
-        title: 'No retention',
-        description: 'Name and identification are only used to generate the PDF and are not stored permanently.',
+        title: 'Minimal data',
+        description: 'We only process the information needed to generate and deliver your report.',
       },
       {
         icon: Trash2,
-        title: 'Immediate deletion',
-        description: 'Report data is cleared from working memory after delivery.',
+        title: 'Limited retention',
+        description: 'We do not permanently retain report data on our side.',
       },
       {
         icon: UserCheck,
@@ -162,25 +169,26 @@ const contentByLanguage = {
       {
         title: '1. Data controller',
         body: [
-          'In accordance with Regulation (EU) 2016/679 (GDPR), the data controller is:',
+          'In accordance with Regulation (EU) 2016/679 (GDPR), the data controller is TaxNomad.',
+          'The service is operated by Antonio Ballesteros Alonso.',
+          'For any privacy or data protection matter, you can contact hola@regla183.com.',
         ],
         list: [
-          ['Name', 'Antonio Ballesteros Alonso'],
-          ['Address', 'Carrer Miquel Rosselló i Alemany, 48 07015 Palma de Mallorca, Spain'],
-          ['Tax ID', '08997554T'],
-          ['Email', 'hola@regla183.com'],
+          ['Service', 'TaxNomad'],
+          ['Contact', 'hola@regla183.com'],
+          ['Legal reference', 'Full owner details are available in the Legal Notice.'],
         ],
       },
       {
-        title: '2. Data we collect and why',
+        title: '2. Data we process',
         blocks: [
           {
-            title: '2.1 Calculator usage data',
-            body: 'The date ranges you enter are processed locally in your browser to calculate physical presence days. They are not sent to a server during the standard calculator flow.',
+            title: '2.1 User-entered date ranges',
+            body: 'Date ranges are used to calculate days of physical presence in Spain. During the standard calculator flow, they are processed locally in the browser.',
           },
           {
             title: '2.2 PDF report data',
-            body: 'To generate the personalised report we collect your full name and identification number (passport or NIE). This information is used solely to populate your PDF report.',
+            body: 'If the user purchases the premium report, we process full name, email, and identification details (passport or NIE) to generate and deliver the personalised PDF.',
             note: 'Legal basis: Article 6(1)(b) GDPR — performance of a contract.',
           },
           {
@@ -190,24 +198,29 @@ const contentByLanguage = {
             link: { href: 'https://stripe.com/privacy', label: 'stripe.com/privacy' },
           },
           {
-            title: '2.4 Technical data and advertising cookies',
-            body: 'If advertising is enabled through Google AdSense, Google may use cookies to personalise ads based on your browsing history.',
+            title: '2.4 Processing purposes',
+            body: 'We process data solely to deliver the service, generate the purchased report, and manage the related payment flow.',
+            note: 'We do not sell data or share it with third parties for our own marketing purposes.',
+          },
+          {
+            title: '2.5 Optional analytics',
+            body: 'If you accept analytics cookies, Google Analytics 4 may collect aggregated usage and navigation data to help us improve the service.',
             note: 'Legal basis: Article 6(1)(a) GDPR — consent.',
-            link: { href: 'https://adssettings.google.com', label: 'adssettings.google.com' },
+            link: { href: 'https://policies.google.com/technologies/partner-sites', label: 'policies.google.com/technologies/partner-sites' },
           },
         ],
       },
       {
         title: '3. Retention period',
         body: [
-          'Report personal data is not stored persistently by us. It is processed for delivery and then discarded.',
+          'Report data is not permanently stored by us. It is used for PDF generation and delivery and is not retained persistently beyond that process.',
           'Transaction data may be retained by Stripe according to its legal obligations and retention policies.',
         ],
       },
       {
         title: '4. International transfers',
         body: [
-          'Payment data is handled by Stripe, Inc. in the United States under recognised international transfer mechanisms such as the EU-U.S. Data Privacy Framework and Standard Contractual Clauses.',
+          'Payment data is handled by Stripe, Inc. and may involve international transfers under the safeguards applicable at the relevant time.',
           'We do not perform any other international transfers of personal data.',
         ],
       },
@@ -228,11 +241,12 @@ const contentByLanguage = {
         ],
       },
       {
-        title: '6. Cookies',
-        body: ['We only rely on the following local or third-party mechanisms:'],
+        title: '6. Local browser technologies',
+        body: ['At present, we only rely on local mechanisms necessary for the basic service experience:'],
         plainList: [
-          'localStorage to remember language and theme preferences. It does not contain sensitive personal data.',
-          'Google AdSense cookies, only if advertising is enabled and subject to prior consent when legally required.',
+          'localStorage to remember language and theme preferences.',
+          'localStorage to record your optional cookie consent preference.',
+          'Google Analytics 4 is only enabled if you accept analytics cookies.',
         ],
       },
     ],

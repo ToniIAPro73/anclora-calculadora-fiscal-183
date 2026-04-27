@@ -6,8 +6,8 @@ export function SeoAppSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Calculadora Nómada Fiscal 183 Días',
-    alternateName: '183-Day Tax Nomad Calculator',
+    name: 'TaxNomad',
+    alternateName: '183 Day Rule Spain Calculator',
     applicationCategory: 'FinanceApplication',
     operatingSystem: 'Web',
     url: APP_ORIGIN,
@@ -18,18 +18,15 @@ export function SeoAppSchema() {
       availability: 'https://schema.org/InStock',
       url: APP_ORIGIN,
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: '1250',
-    },
-    publisher: {
-      '@type': 'Person',
-      name: 'Antonio Ballesteros Alonso',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Palma de Mallorca',
-        addressCountry: 'ES',
+    provider: {
+      '@type': 'Organization',
+      name: 'TaxNomad',
+      url: APP_ORIGIN,
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email: 'hola@regla183.com',
+        availableLanguage: ['English', 'Spanish'],
       },
     },
   };

@@ -17,6 +17,10 @@ export default async function handler(req, res) {
     `https://${host}/en/privacy/`,
     `https://${host}/es/terms/`,
     `https://${host}/en/terms/`,
+    `https://${host}/es/legal-notice/`,
+    `https://${host}/en/legal-notice/`,
+    `https://${host}/es/cookies/`,
+    `https://${host}/en/cookies/`,
   ];
 
   const body = JSON.stringify({
