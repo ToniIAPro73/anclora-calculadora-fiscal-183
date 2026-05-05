@@ -1,10 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, EnvelopeSimple, ShieldCheck } from '@phosphor-icons/react';
 import { useLanguage } from '@/hooks/useLanguage';
 
 const Footer = () => {
-  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const { t, language } = useLanguage();
 
@@ -32,30 +30,30 @@ const Footer = () => {
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
               {t('footer.legalTitle')}
             </h4>
-            <button
-              onClick={() => navigate(`${langPrefix}/privacy`)}
+            <a
+              href={`${langPrefix}/privacy/`}
               className="inline-flex items-center gap-2 text-left text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {t('footer.privacy')} <ArrowUpRight size={14} weight="bold" />
-            </button>
-            <button
-              onClick={() => navigate(`${langPrefix}/terms`)}
+            </a>
+            <a
+              href={`${langPrefix}/terms/`}
               className="inline-flex items-center gap-2 text-left text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {t('footer.terms')} <ArrowUpRight size={14} weight="bold" />
-            </button>
-            <button
-              onClick={() => navigate(`${langPrefix}/legal-notice`)}
+            </a>
+            <a
+              href={`${langPrefix}/legal-notice/`}
               className="inline-flex items-center gap-2 text-left text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {t('footer.legalNotice')} <ArrowUpRight size={14} weight="bold" />
-            </button>
-            <button
-              onClick={() => navigate(`${langPrefix}/cookies`)}
+            </a>
+            <a
+              href={`${langPrefix}/cookies/`}
               className="inline-flex items-center gap-2 text-left text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {t('footer.cookies')} <ArrowUpRight size={14} weight="bold" />
-            </button>
+            </a>
           </div>
 
           <div className="flex flex-col gap-3">

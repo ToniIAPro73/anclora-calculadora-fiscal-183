@@ -59,7 +59,7 @@ const LegalNotice = () => {
         <link rel="canonical" href={getCanonicalUrl(language, '/legal-notice')} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/legal-notice')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/legal-notice')} />
-        <link rel="alternate" hrefLang="x-default" href={`${getDefaultUrl()}legal-notice`} />
+        <link rel="alternate" hrefLang="x-default" href={getCanonicalUrl('es', '/legal-notice')} />
       </Helmet>
 
       <div className="min-h-screen bg-background flex flex-col">

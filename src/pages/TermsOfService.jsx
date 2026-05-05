@@ -125,7 +125,7 @@ const TermsOfService = () => {
         <link rel="canonical" href={getCanonicalUrl(language, '/terms')} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/terms')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/terms')} />
-        <link rel="alternate" hrefLang="x-default" href={`${getDefaultUrl()}terms`} />
+        <link rel="alternate" hrefLang="x-default" href={getCanonicalUrl('es', '/terms')} />
       </Helmet>
       <div className="min-h-screen bg-background flex flex-col">
         <Header />

@@ -249,7 +249,7 @@ const TaxNomadCalculator = () => {
         <link rel="canonical" href={canonicalUrl} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en')} />
-        <link rel="alternate" hrefLang="x-default" href={getDefaultUrl()} />
+        <link rel="alternate" hrefLang="x-default" href={getCanonicalUrl('es')} />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
