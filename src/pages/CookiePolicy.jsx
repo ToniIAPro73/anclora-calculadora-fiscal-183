@@ -164,7 +164,7 @@ const CookiePolicy = () => {
         <link rel="canonical" href={getCanonicalUrl(language, '/cookies')} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/cookies')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/cookies')} />
-        <link rel="alternate" hrefLang="x-default" href={`${getDefaultUrl()}cookies`} />
+        <link rel="alternate" hrefLang="x-default" href={getCanonicalUrl('es', '/cookies')} />
       </Helmet>
 
       <div className="min-h-screen bg-background flex flex-col">

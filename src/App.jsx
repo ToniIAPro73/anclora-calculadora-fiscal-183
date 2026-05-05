@@ -30,22 +30,39 @@ function AppShell() {
         <Routes>
           <Route path="/" element={<TaxNomadCalculator />} />
           <Route path="/calculator" element={<TaxNomadCalculator />} />
+          <Route path="/calculator/" element={<TaxNomadCalculator />} />
           <Route path="/es" element={<TaxNomadCalculator />} />
+          <Route path="/es/" element={<TaxNomadCalculator />} />
           <Route path="/en" element={<TaxNomadCalculator />} />
+          <Route path="/en/" element={<TaxNomadCalculator />} />
           <Route path="/es/calculator" element={<TaxNomadCalculator />} />
+          <Route path="/es/calculator/" element={<TaxNomadCalculator />} />
           <Route path="/en/calculator" element={<TaxNomadCalculator />} />
+          <Route path="/en/calculator/" element={<TaxNomadCalculator />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/privacy/" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/terms/" element={<TermsOfService />} />
           <Route path="/es/privacy" element={<PrivacyPolicy />} />
+          <Route path="/es/privacy/" element={<PrivacyPolicy />} />
           <Route path="/en/privacy" element={<PrivacyPolicy />} />
+          <Route path="/en/privacy/" element={<PrivacyPolicy />} />
           <Route path="/es/terms" element={<TermsOfService />} />
+          <Route path="/es/terms/" element={<TermsOfService />} />
           <Route path="/en/terms" element={<TermsOfService />} />
+          <Route path="/en/terms/" element={<TermsOfService />} />
           <Route path="/legal-notice" element={<LegalNotice />} />
+          <Route path="/legal-notice/" element={<LegalNotice />} />
           <Route path="/es/legal-notice" element={<LegalNotice />} />
+          <Route path="/es/legal-notice/" element={<LegalNotice />} />
           <Route path="/en/legal-notice" element={<LegalNotice />} />
+          <Route path="/en/legal-notice/" element={<LegalNotice />} />
           <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="/cookies/" element={<CookiePolicy />} />
           <Route path="/es/cookies" element={<CookiePolicy />} />
+          <Route path="/es/cookies/" element={<CookiePolicy />} />
           <Route path="/en/cookies" element={<CookiePolicy />} />
+          <Route path="/en/cookies/" element={<CookiePolicy />} />
           <Route path="/payment-mock" element={<PaymentMock />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="*" element={<TaxNomadCalculator />} />

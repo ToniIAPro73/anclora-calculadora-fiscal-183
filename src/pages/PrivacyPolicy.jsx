@@ -267,7 +267,7 @@ const PrivacyPolicy = () => {
         <link rel="canonical" href={getCanonicalUrl(language, '/privacy')} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/privacy')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/privacy')} />
-        <link rel="alternate" hrefLang="x-default" href={`${getDefaultUrl()}privacy`} />
+        <link rel="alternate" hrefLang="x-default" href={getCanonicalUrl('es', '/privacy')} />
       </Helmet>
       <div className="min-h-screen bg-background flex flex-col">
         <Header />

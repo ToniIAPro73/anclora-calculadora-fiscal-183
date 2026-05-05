@@ -45,6 +45,56 @@
       "source": "/calculator/",
       "destination": "/es/calculator/",
       "permanent": true
+    },
+    {
+      "source": "/es/privacy",
+      "destination": "/es/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/en/privacy",
+      "destination": "/en/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/es/cookies",
+      "destination": "/es/cookies/",
+      "permanent": true
+    },
+    {
+      "source": "/en/cookies",
+      "destination": "/en/cookies/",
+      "permanent": true
+    },
+    {
+      "source": "/es/legal-notice",
+      "destination": "/es/legal-notice/",
+      "permanent": true
+    },
+    {
+      "source": "/en/legal-notice",
+      "destination": "/en/legal-notice/",
+      "permanent": true
+    },
+    {
+      "source": "/es/terms",
+      "destination": "/es/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/en/terms",
+      "destination": "/en/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/es/calculator",
+      "destination": "/es/calculator/",
+      "permanent": true
+    },
+    {
+      "source": "/en/calculator",
+      "destination": "/en/calculator/",
+      "permanent": true
     }
   ],
   "rewrites": [
