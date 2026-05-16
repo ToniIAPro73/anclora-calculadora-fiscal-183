@@ -14,7 +14,7 @@
     {
       "source": "/",
       "destination": "/es/",
-      "permanent": true
+      "statusCode": 301
     },
     {
       "source": "/privacy",

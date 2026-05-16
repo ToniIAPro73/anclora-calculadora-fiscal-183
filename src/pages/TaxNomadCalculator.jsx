@@ -246,6 +246,7 @@ const TaxNomadCalculator = () => {
       <Helmet>
         <title>{t('meta.title')}</title>
         <meta name="description" content={t('meta.description')} />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href={canonicalUrl} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en')} />

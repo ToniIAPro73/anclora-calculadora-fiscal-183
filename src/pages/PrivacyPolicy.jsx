@@ -264,6 +264,7 @@ const PrivacyPolicy = () => {
       <Helmet>
         <title>{content.title}</title>
         <meta name="description" content={content.description} />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href={getCanonicalUrl(language, '/privacy')} />
         <link rel="alternate" hrefLang="es" href={getCanonicalUrl('es', '/privacy')} />
         <link rel="alternate" hrefLang="en" href={getCanonicalUrl('en', '/privacy')} />
